@@ -1,14 +1,28 @@
-import http from "http";
+const { api } = require('./routes/api');
+const express = require('express');
+const http = require('node:http');
+const cors = require('cors');
+const morgan = require('morgan');
 
-export const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(
-    JSON.stringify({
-      data: "It Works!",
-    }),
-  );
-});
+require('dotenv').config();
 
-server.listen(3000, () => {
-  console.log("Server running on http://localhost:3000/");
+const PORT = process.env.PORT || 8000;
+
+const app = express();
+const server = http.createServer(app);
+
+app.use(
+  cors({
+    origin: ['http://localhost:5000', 'http://localhost:8000'],
+  })
+);
+
+app.use(morgan('combined'));
+
+app.use(express.json());
+
+app.use('/', api);
+
+server.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`);
 });
