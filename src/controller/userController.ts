@@ -1,16 +1,64 @@
 import { Request, Response } from 'express';
-const { createUser } = require('../models/userModel');
+const { createUser, currentUser } = require('../models/userModel');
+const { pool } = require('../config/dbConnect');
+const bcrypt = require('bcrypt');
+const jwtGenerator = require('../utils/index.ts');
 
 const createNewUser = async (req: Request, res: Response) => {
-  const { firstName, email, mobile, password } = req.body;
+  const { firstName, email, mobilePhone, password } = req.body;
+
   try {
-    const newUser = await createUser(firstName, email, mobile, password);
-    res.json(newUser);
+    const curUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+
+    if (curUser.rows.length > 0) {
+      return res.status(401).json('User already exist!');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const bcryptPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await createUser(firstName, email, mobilePhone, bcryptPassword);
+    const jwtToken = jwtGenerator(newUser.user_id);
+
+    return res.json({ jwtToken });
   } catch (error) {
     console.log('error', error);
-
     res.status(500).json({ error: error.message });
   }
 };
 
-module.exports = { createNewUser };
+const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  try {
+    const curUser = await currentUser(email);
+    console.log('curUser', curUser);
+
+    if (curUser.length === 0) {
+      return res.status(401).json('Invalid Credential');
+    }
+
+    const validPassword = await bcrypt.compare(password, curUser.user_password);
+
+    if (!validPassword) {
+      return res.status(401).json('Invalid Credential');
+    }
+
+    const jwtToken = jwtGenerator(curUser.user_id);
+    return res.json({ jwtToken });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server error');
+  }
+};
+
+const verifyUser = async (req: Request, res: Response) => {
+  try {
+    res.json(true);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+module.exports = { createNewUser, loginUser, verifyUser };

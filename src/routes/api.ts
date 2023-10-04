@@ -1,8 +1,10 @@
 const express = require('express');
-const { usersRouter } = require('./authRoutes');
+const { authRouter, loginRouter, verifyRouter } = require('./authRoutes');
 
 const api = express.Router();
 
-api.use('/users', usersRouter);
+api.use('/register', authRouter);
+api.use('/login', loginRouter);
+api.use('/verify', verifyRouter);
 
 module.exports = { api };

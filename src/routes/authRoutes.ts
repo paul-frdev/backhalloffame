@@ -1,8 +1,14 @@
 const express = require('express');
-const { createNewUser } = require('../controller/userController');
+const { createNewUser, loginUser, verifyUser } = require('../controller/userController');
+const validInfo = require('../middlewares/validInfo');
+const authorize = require('../middlewares/authorize');
 
-const usersRouter = express.Router();
+const authRouter = express.Router();
+const loginRouter = express.Router();
+const verifyRouter = express.Router();
 
-usersRouter.post('/', createNewUser);
+authRouter.post('/', validInfo, createNewUser);
+loginRouter.post('/', validInfo, loginUser);
+verifyRouter.post('/', authorize, verifyUser);
 
-module.exports = { usersRouter };
+module.exports = { authRouter, loginRouter, verifyRouter };
