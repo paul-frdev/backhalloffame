@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-const { createUser, currentUser } = require('../models/userModel');
+const { createUser, currentUser, authorize } = require('../models/userModel');
 const { pool } = require('../config/dbConnect');
 const bcrypt = require('bcrypt');
-const jwtGenerator = require('../utils/index.ts');
+const { jwtGenerator, parseJwt, generateRefreshToken } = require('../utils/index.ts');
 
 const createNewUser = async (req: Request, res: Response) => {
   const { firstName, email, mobilePhone, password } = req.body;
@@ -10,7 +10,7 @@ const createNewUser = async (req: Request, res: Response) => {
   try {
     const curUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-    if (curUser.rows.length > 0) {
+    if (curUser.length > 0) {
       return res.status(401).json('User already exist!');
     }
 
@@ -32,7 +32,6 @@ const loginUser = async (req: Request, res: Response) => {
 
   try {
     const curUser = await currentUser(email);
-    console.log('curUser', curUser);
 
     if (curUser.length === 0) {
       return res.status(401).json('Invalid Credential');
@@ -45,6 +44,7 @@ const loginUser = async (req: Request, res: Response) => {
     }
 
     const jwtToken = jwtGenerator(curUser.user_id);
+
     return res.json({ jwtToken });
   } catch (error) {
     console.error(error.message);
@@ -61,4 +61,17 @@ const verifyUser = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = { createNewUser, loginUser, verifyUser };
+const authorizeUserProfile = async (req: Request, res: Response) => {
+  const userId = parseJwt(req.headers.jwt_token);
+
+  try {
+    const curUser = await authorize(userId.user.id);
+
+    res.json(curUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Server error');
+  }
+};
+
+module.exports = { createNewUser, loginUser, verifyUser, authorizeUserProfile };

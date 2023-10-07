@@ -14,4 +14,10 @@ const currentUser = async (email: string) => {
   return rows[0];
 };
 
-module.exports = { createUser, currentUser };
+const authorize = async (userId: string) => {
+  const query = 'SELECT first_name, email FROM users WHERE user_id = $1';
+  const { rows } = await pool.query(query, [userId]);
+
+  return rows[0];
+};
+module.exports = { createUser, currentUser, authorize };

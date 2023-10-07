@@ -9,6 +9,7 @@
     "no-unused-vars": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
-    "no-useless-escape": "warn"
+    "no-useless-escape": "warn",
+    "@typescript-eslint/no-namespace": "warn"
   }
 }
