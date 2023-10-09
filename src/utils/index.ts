@@ -26,7 +26,7 @@ const parseJwt = (token: string) => {
 };
 
 const generateRefreshToken = (id: string) => {
-  return jwt.sign({ id }, process.env.jwtSecret, { expiresIn: '1h' });
+  return jwt.sign({ id }, process.env.jwtSecret, { expiresIn: '4h' });
 };
 
 module.exports = { jwtGenerator, parseJwt, generateRefreshToken };

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 const { createUser, currentUser, authorize } = require('../models/userModel');
 const { pool } = require('../config/dbConnect');
 const bcrypt = require('bcrypt');
-const { jwtGenerator, parseJwt, generateRefreshToken } = require('../utils/index.ts');
+const { jwtGenerator, parseJwt } = require('../utils/index.ts');
 
 const createNewUser = async (req: Request, res: Response) => {
   const { firstName, email, mobilePhone, password } = req.body;
