@@ -1,18 +1,17 @@
 import { Request, Response } from 'express';
+const asyncHandler = require('express-async-handler');
 
-const { createBlogCategoryModel } = require('../models/blogModel');
+const { createBlogCategoryModel, getAllCategoriesModel, createArticleModel } = require('../models/blogModel');
 const { pool } = require('../config/dbConnect');
 
 const createNewBlogCategory = async (req: Request, res: Response) => {
   const { title } = req.body;
 
-  // console.log('title', title);
-
   try {
     const sameTitleCategory = await pool.query('SELECT * FROM blog_categories WHERE title = $1', [title]);
 
     if (sameTitleCategory.rows.length > 0) {
-      return res.status(400).json({ error: 'Category with the same title already exists' });
+      return res.status(400).json({ error: 'Category with the same title is already exists' });
     }
 
     const newTitleCategory = await createBlogCategoryModel(title);
@@ -24,4 +23,28 @@ const createNewBlogCategory = async (req: Request, res: Response) => {
   }
 };
 
-module.exports = { createNewBlogCategory };
+const getallCategories = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const response = await getAllCategoriesModel();
+
+    return res.json(response);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// articles
+const createNewArticle = asyncHandler(async (req: Request, res: Response) => {
+  const { title, description, images, category_id } = req.body;
+
+  try {
+    const response = await createArticleModel(title, description, images, category_id);
+
+    return res.json(response);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+});
+
+module.exports = { createNewBlogCategory, getallCategories, createNewArticle };

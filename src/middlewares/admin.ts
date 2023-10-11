@@ -1,22 +1,19 @@
-import { NextFunction, Request, Response } from 'express';
-const { pool } = require('../config/dbConnect');
-const asyncHandler = require('express-async-handler');
+import { NextFunction, Request, Response } from "express";
+const { pool } = require("../config/dbConnect");
+const asyncHandler = require("express-async-handler");
 
-const isAdmin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const user = req.user;
-  const query = 'SELECT u.first_name, r.role_name, r.permissions FROM users u JOIN roles r ON u.role_id = r.role_id WHERE u.email = $1;';
+const isAdmin = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const query = `SELECT u.first_name, r.role_name, r.permissions FROM users u JOIN roles r ON u.role_id = r.role_id WHERE u.user_id = '${req.user}'`;
 
-  console.log('user', user);
-  
-  const adminUser = await pool.query(query, [user?.email]);
+    const adminUser = await pool.query(query);
 
-  console.log('adminUser', adminUser);
-
-  if (user?.email) {
-    // throw new Error('You are not an admin');
-  } else {
-    next();
-  }
-});
+    if (adminUser.rows[0].role_name === "admin") {
+      next();
+    } else {
+      return res.status(403).json("Access denied");
+    }
+  },
+);
 
 module.exports = isAdmin;

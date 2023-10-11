@@ -1,5 +1,8 @@
 import 'express-serve-static-core';
 
+export interface File {
+  file: string;
+}
 export interface User {
   id: string;
   firstName: string;
@@ -13,5 +16,6 @@ export interface User {
 declare module 'express' {
   export interface Request {
     user?: User;
+    files: File[];
   }
 }
