@@ -1,8 +1,9 @@
 const express = require('express');
 const { authRouter, loginRouter, verifyRouter, authorizeRouter } = require('./authRoutes');
 const blogCategoryRouter = require('./blogRoutes');
+const articleRouter = require('./articleRoutes');
 
-const uploadImgRouter = require('./uploadImgRoutes');
+const imgRouter = require('./uploadImgRoutes');
 
 const api = express.Router();
 
@@ -16,9 +17,9 @@ api.use('/', authorizeRouter);
 api.use('/api/blog-category', blogCategoryRouter);
 
 //articles
-api.use('/api/articles', blogCategoryRouter);
+api.use('/api/article', articleRouter);
 
 //images
-api.use('/api/upload-image', uploadImgRouter);
+api.use('/api/image', imgRouter);
 
 module.exports = api;

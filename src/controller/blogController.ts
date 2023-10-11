@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 const asyncHandler = require('express-async-handler');
 
-const { createBlogCategoryModel, getAllCategoriesModel, createArticleModel } = require('../models/blogModel');
+const { createBlogCategoryModel, getAllCategoriesModel } = require('../models/blogModel');
 const { pool } = require('../config/dbConnect');
 
 const createNewBlogCategory = async (req: Request, res: Response) => {
@@ -33,18 +33,6 @@ const getallCategories = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-// articles
-const createNewArticle = asyncHandler(async (req: Request, res: Response) => {
-  const { title, description, images, category_id } = req.body;
 
-  try {
-    const response = await createArticleModel(title, description, images, category_id);
 
-    return res.json(response);
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
-  }
-});
-
-module.exports = { createNewBlogCategory, getallCategories, createNewArticle };
+module.exports = { createNewBlogCategory, getallCategories };

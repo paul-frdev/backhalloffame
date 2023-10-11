@@ -15,12 +15,4 @@ const getAllCategoriesModel = async () => {
   return rows;
 };
 
-const createArticleModel = async (title: string, description: string, images: string[], category_id: string) => {
-  const query = 'INSERT INTO articles (title, description, images, category_id);';
-
-  const { rows } = await pool.query(query, [title, description, images, category_id]);
-
-  return rows[0];
-};
-
-module.exports = { createBlogCategoryModel, getAllCategoriesModel, createArticleModel };
+module.exports = { createBlogCategoryModel, getAllCategoriesModel };
