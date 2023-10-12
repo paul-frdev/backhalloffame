@@ -54,3 +54,8 @@ VALUES
     '85b28001-7b9e-462e-a582-9ab7ee8f245d',
     '[{"public_id": "public_id_1", "url": "url_1"}, {"public_id": "public_id_2", "url": "url_2"}]'
 );
+
+
+SELECT a.title, a.description, a.images, c.title FROM articles AS a JOIN blog_categories AS c On a.category_id = c.category_id;
+
+SELECT a.title, a.description, a.images, c.title FROM articles AS a JOIN blog_categories AS c ON a.category_id = c.category_id WHERE a.article_id = '';
