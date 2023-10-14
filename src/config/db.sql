@@ -56,6 +56,48 @@ VALUES
 );
 
 
-SELECT a.title, a.description, a.images, c.title FROM articles AS a JOIN blog_categories AS c On a.category_id = c.category_id;
+SELECT a.title, a.description, a.images, c.title
+FROM articles AS a JOIN blog_categories AS c On a.category_id = c.category_id;
 
-SELECT a.title, a.description, a.images, c.title FROM articles AS a JOIN blog_categories AS c ON a.category_id = c.category_id WHERE a.article_id = '';
+SELECT a.title, a.description, a.images, c.title
+FROM articles AS a JOIN blog_categories AS c ON a.category_id = c.category_id
+WHERE a.article_id = '';
+
+CREATE TABLE products
+(
+  product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  discount DECIMAL(4, 2),
+  isDiscount BOOLEAN NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  previewImage VARCHAR(255) NOT NULL,
+  images JSONB NOT NULL,
+  color_id INT,
+  size_id INT,
+  weight_id INT,
+  FOREIGN KEY (color_id) REFERENCES colors(colors_id),
+  FOREIGN KEY (size_id) REFERENCES sizes(sizes_id),
+  FOREIGN KEY (weight_id) REFERENCES weights(weights_id)
+);
+
+CREATE TABLE weights
+(
+  weights_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  weight_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE sizes
+(
+  sizes_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  size_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE colors
+(
+  colors_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  color_name VARCHAR(255) NOT NULL
+);
+
+-- INSERT INTO colors 'Black' VALUES ($1) RETURNING *

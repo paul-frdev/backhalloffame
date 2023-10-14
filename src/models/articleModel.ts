@@ -13,7 +13,6 @@ const getALlArticlesModel = async () => {
     'SELECT a.article_id, a.title, a.created_at, a.description, a.images, c.title as cat_title FROM articles AS a JOIN blog_categories AS c On a.category_id = c.category_id';
 
   const { rows } = await pool.query(query);
-  console.log('rows', rows);
 
   return rows;
 };

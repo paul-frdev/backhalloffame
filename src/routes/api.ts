@@ -2,6 +2,9 @@ const express = require('express');
 const { authRouter, loginRouter, verifyRouter, authorizeRouter } = require('./authRoutes');
 const blogCategoryRouter = require('./blogRoutes');
 const articleRouter = require('./articleRoutes');
+const colorsRouter = require('./colorsRouters');
+const weightsRouter = require('./weightsRoutes');
+const sizeRouter = require('./sizesRoutes');
 
 const imgRouter = require('./uploadImgRoutes');
 
@@ -21,5 +24,14 @@ api.use('/api/article', articleRouter);
 
 //images
 api.use('/api/image', imgRouter);
+
+//colors
+api.use('/api/color', colorsRouter);
+
+//weights
+api.use('/api/weight', weightsRouter);
+
+// sizes
+api.use('/api/size', sizeRouter);
 
 module.exports = api;
