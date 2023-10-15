@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/', createSize);
 router.put('/:id', updateSize);
 router.delete('/:id', deleteSize);
-router.get('/:', getSizeById);
+router.get('/:id', getSizeById);
 router.get('/', getallSizes);
 
 module.exports = router;

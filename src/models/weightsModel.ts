@@ -14,9 +14,9 @@ const createWeightModel = async (weightName: string) => {
   }
 };
 
-const updateWeightModel = async (id: string, title: string) => {
+const updateWeightModel = async (id: string, weight_name: string) => {
   try {
-    const query = `UPDATE weights SET weight_name = '${title}' WHERE weights_id = '${id}'`;
+    const query = `UPDATE weights SET weight_name = '${weight_name}' WHERE weights_id = '${id}'`;
 
     const { rows } = await pool.query(query);
 

@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 const asyncHandler = require('express-async-handler');
 
 const createWeight = asyncHandler(async (req: Request, res: Response) => {
-  const { title } = req.body;
+  const { weight_name } = req.body;
 
   try {
-    const response = await createWeightModel(title);
+    const response = await createWeightModel(weight_name);
 
     return res.json(response);
   } catch (error) {
@@ -16,10 +16,10 @@ const createWeight = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const updateWeight = asyncHandler(async (req: Request, res: Response) => {
-  const { title } = req.body;
+  const { weight_name } = req.body;
   const { id } = req.params;
   try {
-    const response = await updateWeightModel(id, title);
+    const response = await updateWeightModel(id, weight_name);
 
     return res.json(response);
   } catch (error) {

@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/', createWeight);
 router.put('/:id', updateWeight);
 router.delete('/:id', deleteWeight);
-router.get('/:', getWeightById);
+router.get('/:id', getWeightById);
 router.get('/', getallWeights);
 
 module.exports = router;

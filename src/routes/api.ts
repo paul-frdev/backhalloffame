@@ -7,6 +7,9 @@ const weightsRouter = require('./weightsRoutes');
 const sizeRouter = require('./sizesRoutes');
 
 const imgRouter = require('./uploadImgRoutes');
+const productRouter = require('./productRoutes');
+const brandRouter = require('./brandRoutes');
+const productCategoryRouter = require('./productCategoriesRoutes');
 
 const api = express.Router();
 
@@ -18,20 +21,17 @@ api.use('/', authorizeRouter);
 
 // blog,
 api.use('/api/blog-category', blogCategoryRouter);
-
-//articles
 api.use('/api/article', articleRouter);
 
-//images
-api.use('/api/image', imgRouter);
-
-//colors
+// product
 api.use('/api/color', colorsRouter);
-
-//weights
 api.use('/api/weight', weightsRouter);
-
-// sizes
 api.use('/api/size', sizeRouter);
+api.use('/api/product', productRouter);
+api.use('api/brand', brandRouter);
+api.use('api/category', productCategoryRouter);
+
+//upload images
+api.use('/api/image', imgRouter);
 
 module.exports = api;

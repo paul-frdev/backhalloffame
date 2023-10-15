@@ -100,4 +100,29 @@ CREATE TABLE colors
   color_name VARCHAR(255) NOT NULL
 );
 
--- INSERT INTO colors 'Black' VALUES ($1) RETURNING *
+CREATE TABLE brands
+(
+  brand_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  brand_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE product_categories
+(
+  category_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  category_name VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE products (
+    product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    discount DECIMAL(4, 2),
+    isDiscount BOOLEAN NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    images JSONB NOT NULL,
+    -- colors text[],
+    -- sizes text[],
+    -- weights text[]
+);
