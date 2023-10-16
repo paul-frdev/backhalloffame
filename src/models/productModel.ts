@@ -24,4 +24,11 @@ const createProductModel = async (
   return rows[0];
 };
 
-module.exports = { createProductModel };
+const getProductsModel = () => async () => {
+  const query = `SELECT * FROM products;`;
+  const { rows } = pool.query(query);
+
+  return rows;
+};
+
+module.exports = { createProductModel, getProductsModel };

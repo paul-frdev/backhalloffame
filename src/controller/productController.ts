@@ -1,4 +1,4 @@
-const { createProductModel } = require('../models/productModel')
+const { createProductModel, getProductsModel } = require('../models/productModel');
 import { Request, Response } from 'express';
 
 const asyncHandler = require('express-async-handler');
@@ -16,5 +16,15 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+const getProducts = asyncHandler(async () => {
+  try {
+    const response = await createProductModel();
 
-module.exports = { createProduct } 
+    return response;
+  } catch (error) {
+    console.log('error', error);
+    throw new Error(error);
+  }
+});
+
+module.exports = { createProduct, getProducts };

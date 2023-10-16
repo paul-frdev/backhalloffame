@@ -24,12 +24,12 @@ api.use('/api/blog-category', blogCategoryRouter);
 api.use('/api/article', articleRouter);
 
 // product
+api.use('/api/product', productRouter);
+api.use('/api/category', productCategoryRouter);
 api.use('/api/color', colorsRouter);
 api.use('/api/weight', weightsRouter);
 api.use('/api/size', sizeRouter);
-api.use('/api/product', productRouter);
-api.use('api/brand', brandRouter);
-api.use('api/category', productCategoryRouter);
+api.use('/api/brand', brandRouter);
 
 //upload images
 api.use('/api/image', imgRouter);
