@@ -113,16 +113,31 @@ CREATE TABLE product_categories
 );
 
 
-CREATE TABLE products (
-    product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    title VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    discount DECIMAL(4, 2),
-    isDiscount BOOLEAN NOT NULL,
-    category VARCHAR(255) NOT NULL,
-    images JSONB NOT NULL,
-    -- colors text[],
-    -- sizes text[],
-    -- weights text[]
+CREATE TABLE products
+(
+  product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  category VARCHAR(255) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  quantity DECIMAL(4, 2) NOT NULL,
+  isDiscount BOOLEAN NOT NULL,
+  discount DECIMAL(4, 2),
+  images JSONB NOT NULL,
+  tags VARCHAR(255) NOT NULL,
+  -- colors text[],
+  -- sizes text[],
+  -- weights text[],
+  -- brands text[]
 );
+
+
+-- SELECT 
+--   p.product_id,
+--   p.title as product_title,
+--   (
+--     SELECT array_agg(s.size_name)
+--     FROM sizes s
+--     WHERE s.sizes_id = ANY(p.sizes)
+--   ) as sizes,
+-- FROM products p;

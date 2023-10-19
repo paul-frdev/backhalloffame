@@ -10,6 +10,7 @@ const imgRouter = require('./uploadImgRoutes');
 const productRouter = require('./productRoutes');
 const brandRouter = require('./brandRoutes');
 const productCategoryRouter = require('./productCategoriesRoutes');
+const { errorHandler, notFound } = require('../middlewares/errorHandler');
 
 const api = express.Router();
 
@@ -33,5 +34,9 @@ api.use('/api/brand', brandRouter);
 
 //upload images
 api.use('/api/image', imgRouter);
+
+//handlers
+api.use(errorHandler);
+api.use(notFound);
 
 module.exports = api;

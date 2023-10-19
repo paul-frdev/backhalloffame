@@ -4,10 +4,26 @@ import { Request, Response } from 'express';
 const asyncHandler = require('express-async-handler');
 
 const createProduct = asyncHandler(async (req: Request, res: Response) => {
-  const { product_id, title, description, price, discount, isDiscount, category, images, colors, sizes, weights } = req.body;
+  const { title, description, price, discountPrice, isDiscount, category, images, colors, sizes, weights, brands, quantity, tags } = req.body;
+  const sizesArray = sizes.map((size: string) => `'${size}'`).join(',');
+  const colorsArray = colors.map((size: string) => `'${size}'`).join(',');
 
   try {
-    const response = await createProductModel(product_id, title, description, price, discount, isDiscount, category, images, colors, sizes, weights);
+    const response = await createProductModel(
+      title,
+      description,
+      price,
+      discountPrice,
+      isDiscount,
+      category,
+      images,
+      colorsArray,
+      sizesArray,
+      weights,
+      brands,
+      quantity,
+      tags
+    );
 
     return res.json(response);
   } catch (error) {
@@ -16,11 +32,11 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const getProducts = asyncHandler(async () => {
+const getProducts = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const response = await createProductModel();
+    const response = await getProductsModel();
 
-    return response;
+    return res.json(response);
   } catch (error) {
     console.log('error', error);
     throw new Error(error);

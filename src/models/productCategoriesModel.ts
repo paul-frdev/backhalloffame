@@ -60,7 +60,7 @@ const getAllPrCategoriesModel = async () => {
 
   try {
     const { rows } = await pool.query(query);
-
+    
     return rows;
   } catch (error) {
     // Handle the error here
