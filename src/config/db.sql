@@ -141,3 +141,55 @@ CREATE TABLE products
 --     WHERE s.sizes_id = ANY(p.sizes)
 --   ) as sizes,
 -- FROM products p;
+
+
+-- CREATE TABLE events (
+--     event_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+--     title VARCHAR(255) NOT NULL,
+--     descriptionText TEXT,
+--     event_date DATE,
+--     event_timeslots TEXT[], 
+--     images JSONB,
+--     location VARCHAR(255),
+--     adult_price DECIMAL(10, 2),
+--     child_price DECIMAL(10, 2),
+--     adult_quantity_tickets INT,
+--     children_quantity_tickets INT
+-- );
+
+CREATE TABLE event_timeslots
+(
+  timeslot_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  event_id UUID NOT NULL,
+  timeslot VARCHAR(5) NOT NULL,
+  is_available BOOLEAN DEFAULT true,
+  FOREIGN KEY (event_id) REFERENCES events (event_id)
+);
+
+INSERT INTO event_timeslots
+  (event_id, timeslot)
+VALUES
+  ('581c0001-f4b1-434a-a1d8-51fe46d6709c', '10:00'),
+  ('581c0001-f4b1-434a-a1d8-51fe46d6709c', '14:00');
+
+
+-- CREATE OR REPLACE FUNCTION insert_event_timeslots
+-- ()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--   INSERT INTO event_timeslots
+--     (event_id, timeslot)
+--   SELECT NEW.event_id, unnest(NEW.event_timeslots);
+--   RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- CREATE TRIGGER add_event_timeslots
+-- AFTER
+-- INSERT ON
+-- events
+-- FOR
+-- EACH
+-- ROW
+-- EXECUTE FUNCTION insert_event_timeslots
+-- ();

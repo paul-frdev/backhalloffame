@@ -28,9 +28,6 @@ const uploadImages = asyncHandler(async (req: any, res: Response) => {
 const deleteImages = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  console.log('id', id);
-  
-
   try {
     const deleted = await cloudinaryDeleteImg(id, 'images');
     res.json({ message: 'Deleted' });
