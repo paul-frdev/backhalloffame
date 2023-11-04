@@ -6,6 +6,7 @@ const colorsRouter = require('./colorsRouters');
 const weightsRouter = require('./weightsRoutes');
 const sizeRouter = require('./sizesRoutes');
 const eventRouter = require('./eventRoute');
+const ticketRouter = require('./ticketRoutes');
 
 const imgRouter = require('./uploadImgRoutes');
 const productRouter = require('./productRoutes');
@@ -38,6 +39,9 @@ api.use('/api/image', imgRouter);
 
 //events
 api.use('/api/event', eventRouter);
+
+// ticketImages
+api.use('/api/ticket', ticketRouter);
 
 //handlers
 api.use(notFound);

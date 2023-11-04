@@ -193,3 +193,11 @@ VALUES
 -- ROW
 -- EXECUTE FUNCTION insert_event_timeslots
 -- ();
+
+
+CREATE TABLE ticket_images
+(
+  ticket_images_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  ticket_images JSONB NOT NULL,
+  title VARCHAR(255) NOT NULL,
+);

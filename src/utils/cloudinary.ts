@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary");
+const cloudinary = require('cloudinary');
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -29,5 +29,6 @@ const cloudinaryDeleteImg = async (fileToDelete: any) => {
     });
   });
 };
+
 
 module.exports = { cloudinaryUploadImg, cloudinaryDeleteImg };
