@@ -201,3 +201,9 @@ CREATE TABLE ticket_images
   ticket_images JSONB NOT NULL,
   title VARCHAR(255) NOT NULL,
 );
+
+
+-- ALTER TABLE articles
+-- ADD COLUMN publish_date DATE DEFAULT CURRENT_DATE NOT NULL;
+
+-- ALTER TABLE articles ADD COLUMN status VARCHAR(50) DEFAULT 'draft';

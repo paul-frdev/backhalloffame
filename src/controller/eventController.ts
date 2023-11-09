@@ -1,4 +1,4 @@
-const { createEventModel } = require('../models/eventModel');
+const { createEventModel, getAllEventsModel, getALlPublishedEventsModel } = require('../models/eventModel');
 
 import { Request, Response } from 'express';
 
@@ -8,28 +8,47 @@ const createEvent = asyncHandler(async (req: Request, res: Response) => {
   const {
     title,
     descriptionText,
-    event_date,
-    event_timeslots,
-    imagesToJson,
-    location,
-    adult_price,
-    child_price,
-    adult_quantity_tickets,
-    children_quantity_tickets,
+    address,
+    date,
+    publishDate,
+    time,
+    images,
+    ticketImg,
+    adultPrice,
+    childPrice,
+    adultQuantityTickets,
+    childrenQuantityTickets,
   } = req.body;
+
+  console.log(
+    title,
+    descriptionText,
+    date,
+    address,
+    time,
+    images,
+    ticketImg,
+    adultPrice,
+    childPrice,
+    adultQuantityTickets,
+    childrenQuantityTickets,
+    publishDate,
+  );
 
   try {
     const response = await createEventModel(
       title,
       descriptionText,
-      event_date,
-      event_timeslots,
-      imagesToJson,
-      location,
-      adult_price,
-      child_price,
-      adult_quantity_tickets,
-      children_quantity_tickets
+      address,
+      date,
+      time,
+      images,
+      ticketImg,
+      adultPrice,
+      childPrice,
+      adultQuantityTickets,
+      childrenQuantityTickets,
+      publishDate,
     );
 
     return res.json(response);
@@ -39,4 +58,30 @@ const createEvent = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createEvent };
+
+const getAllEvents = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const getArticles = await getAllEventsModel();
+
+    return res.json(getArticles);
+  } catch (error) {
+    console.log('error');
+
+    throw new Error(error);
+  }
+});
+
+
+const getAllPublishedEvents = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const getArticles = await getALlPublishedEventsModel();
+
+    return res.json(getArticles);
+  } catch (error) {
+    console.log('error');
+
+    throw new Error(error);
+  }
+});
+
+module.exports = { createEvent, getAllEvents, getAllPublishedEvents };
