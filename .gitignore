@@ -18,6 +18,9 @@ gen
 # Built Visual Studio Code Extensions
 *.vsix
 
+# env
+.env
+
 # Folders
 dist
 build
