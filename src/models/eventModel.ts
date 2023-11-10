@@ -59,12 +59,22 @@ const getAllEventsModel = async () => {
 
 const getALlPublishedEventsModel = async () => {
   const query = `
-  SELECT e.event_id, e.title, e.descriptiontext, e.event_date, e.event_timeslots, e.images, e.location, e.adult_price, e.child_price, e.adult_quantity_tickets, e.children_quantity_tickets, e.publish_date, e.status, e.ticket_image, t.ticket_images FROM events AS e  WHERE a.status = 'published'
+  SELECT e.event_id, e.title, e.descriptiontext, e.event_date, e.event_timeslots, e.images, e.location, e.adult_price, e.child_price, e.adult_quantity_tickets, e.children_quantity_tickets, e.publish_date, e.status, e.ticket_image, t.ticket_images FROM events AS e JOIN ticket_images AS t ON e.ticket_image::uuid = t.ticket_images_id WHERE e.status = 'published'
   `;
 
   const { rows } = await pool.query(query);
 
   return rows;
+};
+
+const getPublishedEventIdModel = async (id: string) => {
+  const query = `
+  SELECT e.event_id, e.title, e.descriptiontext, e.event_date, e.event_timeslots, e.images, e.location, e.adult_price, e.child_price, e.adult_quantity_tickets, e.children_quantity_tickets, e.publish_date, e.status, e.ticket_image, t.ticket_images FROM events AS e JOIN ticket_images AS t ON e.ticket_image::uuid = t.ticket_images_id WHERE e.status = 'published' AND e.event_id = '${id}'
+  `;
+
+  const { rows } = await pool.query(query);
+
+  return rows[0];
 };
 
 const publishScheduledEvents = async () => {
@@ -75,4 +85,4 @@ const publishScheduledEvents = async () => {
   return rows;
 };
 
-module.exports = { createEventModel, getAllEventsModel, getALlPublishedEventsModel, publishScheduledEvents };
+module.exports = { createEventModel, getAllEventsModel, getALlPublishedEventsModel, publishScheduledEvents, getPublishedEventIdModel };

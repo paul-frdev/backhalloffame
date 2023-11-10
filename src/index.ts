@@ -20,7 +20,7 @@ const server = http.createServer(app);
 app.use(morgan('combined'));
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'http://localhost:8000'],
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8000'],
   })
 );
 app.use(bodyParser.json());

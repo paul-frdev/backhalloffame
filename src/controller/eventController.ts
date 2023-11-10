@@ -1,4 +1,4 @@
-const { createEventModel, getAllEventsModel, getALlPublishedEventsModel } = require('../models/eventModel');
+const { createEventModel, getAllEventsModel, getALlPublishedEventsModel, getPublishedEventIdModel } = require('../models/eventModel');
 
 import { Request, Response } from 'express';
 
@@ -74,9 +74,9 @@ const getAllEvents = asyncHandler(async (req: Request, res: Response) => {
 
 const getAllPublishedEvents = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const getArticles = await getALlPublishedEventsModel();
-
-    return res.json(getArticles);
+    const getEvents = await getALlPublishedEventsModel();
+    
+    return res.json(getEvents);
   } catch (error) {
     console.log('error');
 
@@ -84,4 +84,17 @@ const getAllPublishedEvents = asyncHandler(async (req: Request, res: Response) =
   }
 });
 
-module.exports = { createEvent, getAllEvents, getAllPublishedEvents };
+const getPublishedEventById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const eventById = await getPublishedEventIdModel(id);
+
+    return res.json(eventById);
+  } catch (error) {
+    console.log('error');
+
+    throw new Error(error);
+  }
+});
+
+module.exports = { createEvent, getAllEvents, getAllPublishedEvents, getPublishedEventById };
