@@ -1,42 +1,52 @@
+import { Request, Response } from 'express';
+
 const { pool } = require('../config/dbConnect');
 
 const createProductModel = async (
   title: string,
   description: string,
   price: string,
+  quantity: number,
   discount: number,
   isdiscount: boolean,
-  category: string,
   images: string[],
+  category: string,
   colors: string[],
   sizes: string[],
   weights: string[],
   brands: string[],
-  quantity: number,
-  tags: string
+  tags: string[]
 ) => {
   const query = `
-  INSERT INTO products (title, description, price, discount, isdiscount, category, images, colors, sizes, weights, brands, tags, quantity)
-  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-  RETURNING *;
+  INSERT INTO products (title, description_text, price, quantity, discount, isdiscount, images, category_id)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+  RETURNING product_id;
 `;
 
   const imagesToJson = JSON.stringify(images);
-  const { rows } = await pool.query(query, [
-    title,
-    description,
-    price,
-    discount,
-    isdiscount,
-    category,
-    imagesToJson,
-    colors,
-    sizes,
-    weights,
-    brands,
-    tags,
-    quantity,
-  ]);
+  const { rows } = await pool.query(query, [title, description, price, quantity, discount, isdiscount, imagesToJson, category]);
+
+  const productId = rows[0].product_id;
+
+  for (const colorId of colors) {
+    await pool.query(`INSERT INTO product_colors (product_id, color_id) VALUES ($1, $2)`, [productId, colorId]);
+  }
+
+  for (const weightId of weights) {
+    await pool.query(`INSERT INTO product_weights (product_id, weight_id) VALUES ($1, $2)`, [productId, weightId]);
+  }
+
+  for (const sizeId of sizes) {
+    await pool.query(`INSERT INTO product_sizes (product_id, size_id) VALUES ($1, $2)`, [productId, sizeId]);
+  }
+
+  for (const brandId of brands) {
+    await pool.query(`INSERT INTO product_brands (product_id, brand_id) VALUES ($1, $2)`, [productId, brandId]);
+  }
+
+  for (const tagId of tags) {
+    await pool.query(`INSERT INTO product_tags (product_id, tag_id) VALUES ($1, $2)`, [productId, tagId]);
+  }
 
   return rows[0];
 };
@@ -44,37 +54,48 @@ const createProductModel = async (
 const getProductsModel = async () => {
   const query = `
   SELECT 
-  p.product_id,
-  p.title as product_title,
-  p.price,
-  p.discount,
-  p.isdiscount,
-  pct.category_name as categoryTitle,
-  p.images,
-  p.tags,
-  (
-    SELECT array_agg(s.size_name)
-    FROM sizes s
-    WHERE s.sizes_id = ANY(ARRAY[p.sizes]::uuid[])
-  ) as sizes,
-  (
-    SELECT array_agg(c.color_name)
-    FROM colors c
-    WHERE c.colors_id = ANY(ARRAY[p.colors]::uuid[])
-  ) as colors,
-  (
-    SELECT array_agg(w.weight_name)
-    FROM weights w
-    WHERE w.weights_id = ANY(ARRAY[p.weights]::uuid[])
-  ) as weights,
-  (
-    SELECT array_agg(b.brand_name)
-    FROM brands b
-    WHERE b.brand_id = ANY(ARRAY[p.brands]::uuid[])
-  ) as brands
+    p.product_id,
+    p.title as product_title,
+    p.description_text,
+    p.price,
+    p.quantity,
+    p.discount,
+    p.isDiscount,
+    p.images,
+    pc.category_name as categoryTitle,
+    (
+        SELECT array_agg(c.color_name)
+        FROM colors c
+        JOIN product_colors pc ON pc.color_id = c.color_id
+        WHERE pc.product_id = p.product_id
+    ) as colors,
+    (
+        SELECT array_agg(s.size_name)
+        FROM sizes s
+        JOIN product_sizes ps ON ps.size_id = s.size_id
+        WHERE ps.product_id = p.product_id
+    ) as sizes,
+    (
+        SELECT array_agg(w.weight_name)
+        FROM weights w
+        JOIN product_weights pw ON pw.weight_id = w.weight_id
+        WHERE pw.product_id = p.product_id
+    ) as weights,
+    (
+        SELECT array_agg(b.brand_name)
+        FROM brands b
+        JOIN product_brands pb ON pb.brand_id = b.brand_id
+        WHERE pb.product_id = p.product_id
+    ) as brands,
+    (
+        SELECT array_agg(t.tag_name)
+        FROM tags t
+        JOIN product_tags pt ON pt.tag_id = t.tag_id
+        WHERE pt.product_id = p.product_id
+    ) as tags
 FROM products p
-JOIN product_categories as pct ON pct.category_id = p.category::uuid;
-  `;
+JOIN product_categories pc ON pc.category_id = p.category_id;
+`;
 
   try {
     const { rows } = await pool.query(query);
@@ -87,4 +108,27 @@ JOIN product_categories as pct ON pct.category_id = p.category::uuid;
   }
 };
 
-module.exports = { createProductModel, getProductsModel };
+const deleteProductModel = async (id: string) => {
+  const query = `
+  DELETE FROM products
+USING product_colors, product_sizes, product_weights, product_brands, product_tags
+WHERE 
+    products.product_id = '${id}' AND
+    products.product_id = product_colors.product_id AND
+    products.product_id = product_sizes.product_id AND
+    products.product_id = product_weights.product_id AND
+    products.product_id = product_brands.product_id AND
+    products.product_id = product_tags.product_id;
+  `;
+
+  try {
+    const { rows } = await pool.query(query);
+    return rows[0];
+  } catch (error) {
+    // Handle the error here
+    console.error('Error deleting product:', error);
+    throw error;
+  }
+};
+
+module.exports = { createProductModel, getProductsModel, deleteProductModel };

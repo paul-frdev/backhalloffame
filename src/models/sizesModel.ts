@@ -16,7 +16,7 @@ const createSizeModel = async (sizeName: string) => {
 
 const updateSizeModel = async (id: string, title: string) => {
   try {
-    const query = `UPDATE sizes SET size_name = '${title}' WHERE sizes_id = '${id}'`;
+    const query = `UPDATE sizes SET size_name = '${title}' WHERE sizes_id @> ARRAY['${id}'::uuid]`;
 
     const { rows } = await pool.query(query);
 
@@ -29,7 +29,7 @@ const updateSizeModel = async (id: string, title: string) => {
 };
 
 const deleteSizeModel = async (id: string) => {
-  const query = `DELETE FROM sizes WHERE sizes_id = '${id}'`;
+  const query = `DELETE FROM sizes WHERE sizes_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);
@@ -42,7 +42,7 @@ const deleteSizeModel = async (id: string) => {
 };
 
 const getSizeByIdModel = async (id: string) => {
-  const query = `SELECT * FROM sizes WHERE sizes_id = '${id}'`;
+  const query = `SELECT * FROM sizes WHERE sizes_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);

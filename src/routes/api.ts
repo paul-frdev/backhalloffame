@@ -12,6 +12,7 @@ const imgRouter = require('./uploadImgRoutes');
 const productRouter = require('./productRoutes');
 const brandRouter = require('./brandRoutes');
 const productCategoryRouter = require('./productCategoriesRoutes');
+const tagsRouter = require('./tagsRoutes');
 const { errorHandler, notFound } = require('../middlewares/errorHandler');
 
 const api = express.Router();
@@ -42,6 +43,9 @@ api.use('/api/event', eventRouter);
 
 // ticketImages
 api.use('/api/ticket', ticketRouter);
+
+//tags
+api.use('/api/tags', tagsRouter);
 
 //handlers
 api.use(notFound);

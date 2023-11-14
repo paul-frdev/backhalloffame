@@ -9,7 +9,7 @@ const createColorModel = async (colorName: string) => {
 };
 
 const updateColorsModel = async (id: string, color_name: string) => {
-  const query = `UPDATE colors SET color_name = '${color_name}' WHERE colors_id = '${id}'`;
+  const query = `UPDATE colors SET color_name = '${color_name}' WHERE colors_id @> ARRAY['${id}'::uuid]`;
 
   const { rows } = await pool.query(query);
 
@@ -17,7 +17,7 @@ const updateColorsModel = async (id: string, color_name: string) => {
 };
 
 const deleteColorsModel = async (id: string) => {
-  const query = `DELETE FROM colors WHERE colors_id = '${id}'`;
+  const query = `DELETE FROM colors WHERE colors_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);
@@ -30,7 +30,7 @@ const deleteColorsModel = async (id: string) => {
 };
 
 const getColorByIdModel = async (id: string) => {
-  const query = `SELECT * FROM colors WHERE colors_id = '${id}'`;
+  const query = `SELECT * FROM colors WHERE colors_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);

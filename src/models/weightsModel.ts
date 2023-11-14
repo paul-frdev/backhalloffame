@@ -16,7 +16,7 @@ const createWeightModel = async (weightName: string) => {
 
 const updateWeightModel = async (id: string, weight_name: string) => {
   try {
-    const query = `UPDATE weights SET weight_name = '${weight_name}' WHERE weights_id = '${id}'`;
+    const query = `UPDATE weights SET weight_name = '${weight_name}' WHERE  weights_id @> ARRAY['${id}'::uuid]`;
 
     const { rows } = await pool.query(query);
 
@@ -29,7 +29,7 @@ const updateWeightModel = async (id: string, weight_name: string) => {
 };
 
 const deleteWeightModel = async (id: string) => {
-  const query = `DELETE FROM weights WHERE weights_id = '${id}'`;
+  const query = `DELETE FROM weights WHERE weights_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);
@@ -42,7 +42,7 @@ const deleteWeightModel = async (id: string) => {
 };
 
 const getWeightByIdModel = async (id: string) => {
-  const query = `SELECT * FROM weights WHERE weights_id = '${id}'`;
+  const query = `SELECT * FROM weights WHERE weights_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);

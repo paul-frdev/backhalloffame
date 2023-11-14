@@ -15,4 +15,32 @@ const getAllCategoriesModel = async () => {
   return rows;
 };
 
-module.exports = { createBlogCategoryModel, getAllCategoriesModel };
+const deleteBlogCategoryModel = async (id: string) => {
+  const query = `DELETE FROM blog_categories WHERE category_id = '${id}'`;
+
+  try {
+    const { rows } = await pool.query(query);
+    return rows[0];
+  } catch (error) {
+    // Handle the error here
+    console.error('Error deleting blog_category:', error);
+    throw error;
+  }
+};
+
+const updateBlogCategoryModel = async (id: string, category_name: string) => {
+  try {
+    const query = `UPDATE blog_categories SET category_name = '${category_name}' WHERE category_id = '${id}'`;
+
+    const { rows } = await pool.query(query);
+
+    return rows[0];
+  } catch (error) {
+    // Handle the error here
+    console.error('Error updating blog_category:', error);
+    throw error;
+  }
+};
+
+
+module.exports = { createBlogCategoryModel, getAllCategoriesModel, deleteBlogCategoryModel, updateBlogCategoryModel };

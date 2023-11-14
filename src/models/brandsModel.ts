@@ -16,7 +16,7 @@ const createBrandModel = async (brandName: string) => {
 
 const updateBrandModel = async (id: string, brand_name: string) => {
   try {
-    const query = `UPDATE brands SET brand_name = '${brand_name}' WHERE brand_id = '${id}'`;
+    const query = `UPDATE brands SET brand_name = '${brand_name}' WHERE brand_id @> ARRAY['${id}'::uuid]`;
 
     const { rows } = await pool.query(query);
 
@@ -29,7 +29,7 @@ const updateBrandModel = async (id: string, brand_name: string) => {
 };
 
 const deleteBrandModel = async (id: string) => {
-  const query = `DELETE FROM brands WHERE brand_id = '${id}'`;
+  const query = `DELETE FROM brands WHERE brand_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);
@@ -42,7 +42,7 @@ const deleteBrandModel = async (id: string) => {
 };
 
 const getBrandByIdModel = async (id: string) => {
-  const query = `SELECT * FROM brands WHERE brand_id = '${id}'`;
+  const query = `SELECT * FROM brands WHERE brand_id @> ARRAY['${id}'::uuid]`;
 
   try {
     const { rows } = await pool.query(query);

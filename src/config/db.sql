@@ -63,74 +63,102 @@ SELECT a.title, a.description, a.images, c.title
 FROM articles AS a JOIN blog_categories AS c ON a.category_id = c.category_id
 WHERE a.article_id = '';
 
-CREATE TABLE products
-(
-  product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  price DECIMAL(10, 2) NOT NULL,
-  discount DECIMAL(4, 2),
-  isDiscount BOOLEAN NOT NULL,
-  category VARCHAR(255) NOT NULL,
-  previewImage VARCHAR(255) NOT NULL,
-  images JSONB NOT NULL,
-  color_id INT,
-  size_id INT,
-  weight_id INT,
-  FOREIGN KEY (color_id) REFERENCES colors(colors_id),
-  FOREIGN KEY (size_id) REFERENCES sizes(sizes_id),
-  FOREIGN KEY (weight_id) REFERENCES weights(weights_id)
+-- CREATE TABLE products
+-- (
+--   product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+--   title VARCHAR(255) NOT NULL,
+--   description_text TEXT NOT NULL,
+--   price DECIMAL(10, 2) NOT NULL,
+--   quantity DECIMAL(10, 2) NOT NULL,
+--   discount DECIMAL(4, 2),
+--   isDiscount BOOLEAN NOT NULL,
+--   images JSONB NOT NULL,
+-- );
+
+CREATE TABLE products (
+    product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description_text TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    quantity DECIMAL(10, 2) NOT NULL,
+    discount DECIMAL(4, 2),
+    isDiscount BOOLEAN NOT NULL,
+    images JSONB NOT NULL,
+    category_id UUID NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES product_categories(category_id)
 );
 
-CREATE TABLE weights
-(
-  weights_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  weight_name VARCHAR(255) NOT NULL
+CREATE TABLE colors (
+    color_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    color_name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE sizes
-(
-  sizes_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  size_name VARCHAR(255) NOT NULL
+CREATE TABLE product_colors (
+    product_id UUID NOT NULL,
+    color_id UUID NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (color_id) REFERENCES colors(color_id),
+    PRIMARY KEY (product_id, color_id)
 );
 
-CREATE TABLE colors
-(
-  colors_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  color_name VARCHAR(255) NOT NULL
+CREATE TABLE weights (
+    weight_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    weight_name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE brands
-(
-  brand_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  brand_name VARCHAR(255) NOT NULL
+CREATE TABLE product_weights (
+    product_id UUID NOT NULL,
+    weight_id UUID NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (weight_id) REFERENCES weights(weight_id),
+    PRIMARY KEY (product_id, weight_id)
 );
+
+CREATE TABLE sizes (
+    size_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    size_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE product_sizes (
+    product_id UUID NOT NULL,
+    size_id UUID NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (size_id) REFERENCES sizes(size_id),
+    PRIMARY KEY (product_id, size_id)
+);
+
+CREATE TABLE brands (
+    brand_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    brand_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE product_brands (
+    product_id UUID NOT NULL,
+    brand_id UUID NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (brand_id) REFERENCES brands(brand_id),
+    PRIMARY KEY (product_id, brand_id)
+);
+
+CREATE TABLE tags (
+    tag_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    tag_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE product_tags (
+    product_id UUID NOT NULL,
+    tag_id UUID NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (tag_id) REFERENCES tags(tag_id),
+    PRIMARY KEY (product_id, tag_id)
+);
+
 
 CREATE TABLE product_categories
 (
   category_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   category_name VARCHAR(255) NOT NULL
 );
-
-
-CREATE TABLE products
-(
-  product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title VARCHAR(255) NOT NULL,
-  description TEXT NOT NULL,
-  category VARCHAR(255) NOT NULL,
-  price DECIMAL(10, 2) NOT NULL,
-  quantity DECIMAL(4, 2) NOT NULL,
-  isDiscount BOOLEAN NOT NULL,
-  discount DECIMAL(4, 2),
-  images JSONB NOT NULL,
-  tags VARCHAR(255) NOT NULL,
-  -- colors text[],
-  -- sizes text[],
-  -- weights text[],
-  -- brands text[]
-);
-
 
 -- SELECT 
 --   p.product_id,

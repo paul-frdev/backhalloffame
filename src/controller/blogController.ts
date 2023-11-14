@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 const asyncHandler = require('express-async-handler');
 
-const { createBlogCategoryModel, getAllCategoriesModel } = require('../models/blogModel');
+const { createBlogCategoryModel, getAllCategoriesModel, deleteBlogCategoryModel, updateBlogCategoryModel } = require('../models/blogModel');
 const { pool } = require('../config/dbConnect');
 
 const createNewBlogCategory = async (req: Request, res: Response) => {
@@ -33,6 +33,31 @@ const getallCategories = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+const updateBlogCategory = asyncHandler(async (req: Request, res: Response) => {
+  const { category_name } = req.body;
+  const { id } = req.params;
+  try {
+    const response = await updateBlogCategoryModel(id, category_name);
+
+    return res.json(response);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const deleteBlogCategory = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+console.log('id', id);
 
 
-module.exports = { createNewBlogCategory, getallCategories };
+  try {
+    const response = await deleteBlogCategoryModel(id);
+
+    return res.json(response);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { createNewBlogCategory, getallCategories, deleteBlogCategory, updateBlogCategory };
