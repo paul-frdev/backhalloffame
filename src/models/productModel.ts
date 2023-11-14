@@ -22,6 +22,7 @@ const createProductModel = async (
   VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   RETURNING product_id;
 `;
+  console.log('discount', discount);
 
   const imagesToJson = JSON.stringify(images);
   const { rows } = await pool.query(query, [title, description, price, quantity, discount, isdiscount, imagesToJson, category]);
@@ -109,25 +110,28 @@ JOIN product_categories pc ON pc.category_id = p.category_id;
 };
 
 const deleteProductModel = async (id: string) => {
-  const query = `
-  DELETE FROM products
-USING product_colors, product_sizes, product_weights, product_brands, product_tags
-WHERE 
-    products.product_id = '${id}' AND
-    products.product_id = product_colors.product_id AND
-    products.product_id = product_sizes.product_id AND
-    products.product_id = product_weights.product_id AND
-    products.product_id = product_brands.product_id AND
-    products.product_id = product_tags.product_id;
-  `;
+  const client = await pool.connect();
 
   try {
-    const { rows } = await pool.query(query);
-    return rows[0];
+    await client.query('BEGIN');
+
+    await Promise.all([
+      client.query(`DELETE FROM product_colors WHERE product_id = '${id}'`),
+      client.query(`DELETE FROM product_sizes WHERE product_id = '${id}'`),
+      client.query(`DELETE FROM product_weights WHERE product_id = '${id}'`),
+      client.query(`DELETE FROM product_brands WHERE product_id = '${id}'`),
+      client.query(`DELETE FROM product_tags WHERE product_id = '${id}'`),
+    ]);
+
+    await client.query(`DELETE FROM products WHERE product_id = '${id}'`);
+
+    await client.query('COMMIT');
   } catch (error) {
-    // Handle the error here
+    await client.query('ROLLBACK');
     console.error('Error deleting product:', error);
     throw error;
+  } finally {
+    client.release();
   }
 };
 

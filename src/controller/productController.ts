@@ -4,7 +4,8 @@ import { Request, Response } from 'express';
 const asyncHandler = require('express-async-handler');
 
 const createProduct = asyncHandler(async (req: Request, res: Response) => {
-  const { title, description, price, discountPrice, isDiscount, category, images, colors, sizes, weights, brands, quantity, tags } = req.body;
+  const { title, description, price, discount, isDiscount, category, images, colors, sizes, weights, brands, quantity, tags } = req.body;
+  console.log('discountPrice', discount);
 
   try {
     const response = await createProductModel(
@@ -12,7 +13,7 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
       description,
       price,
       quantity,
-      discountPrice,
+      discount,
       isDiscount,
       images,
       category,
@@ -33,8 +34,6 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
 const getProducts = asyncHandler(async (req: Request, res: Response) => {
   try {
     const response = await getProductsModel();
-
-    console.log('response', response);
 
     return res.json(response);
   } catch (error) {
