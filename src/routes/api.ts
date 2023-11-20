@@ -13,6 +13,8 @@ const productRouter = require('./productRoutes');
 const brandRouter = require('./brandRoutes');
 const productCategoryRouter = require('./productCategoriesRoutes');
 const tagsRouter = require('./tagsRoutes');
+const slidesRouter = require('./slidesRoutes');
+
 const { errorHandler, notFound } = require('../middlewares/errorHandler');
 
 const api = express.Router();
@@ -46,6 +48,9 @@ api.use('/api/ticket', ticketRouter);
 
 //tags
 api.use('/api/tags', tagsRouter);
+
+// slides
+api.use('/api/slides', slidesRouter);
 
 //handlers
 api.use(notFound);

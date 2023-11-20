@@ -63,18 +63,6 @@ SELECT a.title, a.description, a.images, c.title
 FROM articles AS a JOIN blog_categories AS c ON a.category_id = c.category_id
 WHERE a.article_id = '';
 
--- CREATE TABLE products
--- (
---   product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
---   title VARCHAR(255) NOT NULL,
---   description_text TEXT NOT NULL,
---   price DECIMAL(10, 2) NOT NULL,
---   quantity DECIMAL(10, 2) NOT NULL,
---   discount DECIMAL(4, 2),
---   isDiscount BOOLEAN NOT NULL,
---   images JSONB NOT NULL,
--- );
-
 CREATE TABLE products (
     product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(255) NOT NULL,
@@ -160,68 +148,36 @@ CREATE TABLE product_categories
   category_name VARCHAR(255) NOT NULL
 );
 
--- SELECT 
---   p.product_id,
---   p.title as product_title,
---   (
---     SELECT array_agg(s.size_name)
---     FROM sizes s
---     WHERE s.sizes_id = ANY(p.sizes)
---   ) as sizes,
--- FROM products p;
 
-
--- CREATE TABLE events (
---     event_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
---     title VARCHAR(255) NOT NULL,
---     descriptionText TEXT,
---     event_date DATE,
---     event_timeslots TEXT[], 
---     images JSONB,
---     location VARCHAR(255),
---     adult_price DECIMAL(10, 2),
---     child_price DECIMAL(10, 2),
---     adult_quantity_tickets INT,
---     children_quantity_tickets INT
--- );
-
-CREATE TABLE event_timeslots
-(
-  timeslot_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  event_id UUID NOT NULL,
-  timeslot VARCHAR(5) NOT NULL,
-  is_available BOOLEAN DEFAULT true,
-  FOREIGN KEY (event_id) REFERENCES events (event_id)
+CREATE TABLE events (
+    event_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    descriptionText TEXT NOT NULL,
+    event_date DATE NOT NULL,
+    publish_date DATE NOT NULL,
+    images JSONB NOT NULL,
+    ticket_images JSONB NOT NULL,
+    location_address VARCHAR(255) NOT NULL,
+    adult_price DECIMAL(10, 2) NOT NULL,
+    child_price DECIMAL(10, 2),
+    adult_quantity_tickets INT NOT NULL,
+    children_quantity_tickets INT
 );
 
-INSERT INTO event_timeslots
-  (event_id, timeslot)
-VALUES
-  ('581c0001-f4b1-434a-a1d8-51fe46d6709c', '10:00'),
-  ('581c0001-f4b1-434a-a1d8-51fe46d6709c', '14:00');
 
+CREATE TABLE time_options (
+    time_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    time_value VARCHAR(10),
+    time_label VARCHAR(10)
+);
 
--- CREATE OR REPLACE FUNCTION insert_event_timeslots
--- ()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   INSERT INTO event_timeslots
---     (event_id, timeslot)
---   SELECT NEW.event_id, unnest(NEW.event_timeslots);
---   RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE TRIGGER add_event_timeslots
--- AFTER
--- INSERT ON
--- events
--- FOR
--- EACH
--- ROW
--- EXECUTE FUNCTION insert_event_timeslots
--- ();
-
+CREATE TABLE event_time_options (
+  event_id UUID NOT NULL,
+  time_id UUID NOT NULL,
+  FOREIGN KEY (event_id) REFERENCES events(event_id),
+  FOREIGN KEY (time_id) REFERENCES time_options(time_id),
+  PRIMARY KEY (event_id, time_id)
+);
 
 CREATE TABLE ticket_images
 (
@@ -230,8 +186,50 @@ CREATE TABLE ticket_images
   title VARCHAR(255) NOT NULL,
 );
 
+-- ALTER TABLE articles
+-- ADD COLUMN publish_date DATE DEFAULT CURRENT_DATE NOT NULL;
+
+-- ALTER TABLE events ADD COLUMN status VARCHAR(50) DEFAULT 'draft';
+
+
 
 -- ALTER TABLE articles
 -- ADD COLUMN publish_date DATE DEFAULT CURRENT_DATE NOT NULL;
 
 -- ALTER TABLE articles ADD COLUMN status VARCHAR(50) DEFAULT 'draft';
+INSERT INTO time_options (time_value, time_label)
+VALUES
+('00:00', '00:00'),
+('01:00', '01:00'),
+('02:00', '02:00'),
+('03:00', '03:00'),
+('04:00', '04:00'),
+('05:00', '05:00'),
+('06:00', '06:00'),
+('07:00', '07:00'),
+('08:00', '08:00'),
+('09:00', '09:00'),
+('10:00', '10:00'),
+('11:00', '11:00'),
+('12:00', '12:00'),
+('13:00', '13:00'),
+('14:00', '14:00'),
+('15:00', '15:00'),
+('16:00', '16:00'),
+('17:00', '17:00'),
+('18:00', '18:00'),
+('19:00', '19:00'),
+('20:00', '20:00'),
+('21:00', '21:00'),
+('22:00', '22:00'),
+('23:00', '23:00');
+
+
+-- slides main, shop 
+
+CREATE TABLE slides (
+    slide_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    slide_image JSONB NOT NULL,
+    title VARCHAR(100),
+    type VARCHAR(20) CHECK (type IN ('main_slide', 'shop_slide'))
+);

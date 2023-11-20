@@ -22,7 +22,6 @@ const createProductModel = async (
   VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
   RETURNING product_id;
 `;
-  console.log('discount', discount);
 
   const imagesToJson = JSON.stringify(images);
   const { rows } = await pool.query(query, [title, description, price, quantity, discount, isdiscount, imagesToJson, category]);
