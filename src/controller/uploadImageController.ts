@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 const fs = require('fs');
 const asyncHandler = require('express-async-handler');
 
-const { cloudinaryUploadImg, cloudinaryDeleteImg } = require('../utils/cloudinary');
+const { cloudinaryUploadImg, cloudinaryDeleteImg, getCloudinaryImage } = require('../utils/cloudinary');
 
 const uploadImages = asyncHandler(async (req: any, res: Response) => {
   try {
@@ -19,7 +19,7 @@ const uploadImages = asyncHandler(async (req: any, res: Response) => {
     const images = urls.map((file) => {
       return file;
     });
-    
+
     res.json(images);
   } catch (error) {
     throw new Error(error);
@@ -32,11 +32,22 @@ const deleteImages = asyncHandler(async (req: Request, res: Response) => {
   try {
     const deleted = await cloudinaryDeleteImg(id, 'images');
     console.log('deleted', deleted);
-    
+
     res.json({ message: 'Image deleted' });
   } catch (error) {
     throw new Error(error);
   }
 });
 
-module.exports = { uploadImages, deleteImages };
+const getImageById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const image = await getCloudinaryImage(id);
+
+    return res.json(image);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { uploadImages, deleteImages, getImageById };

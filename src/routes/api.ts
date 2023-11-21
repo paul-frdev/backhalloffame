@@ -25,10 +25,6 @@ api.use('/login', loginRouter);
 api.use('/verify', verifyRouter);
 api.use('/', authorizeRouter);
 
-// blog,
-api.use('/api/blog-category', blogCategoryRouter);
-api.use('/api/article', articleRouter);
-
 // product
 api.use('/api/product', productRouter);
 api.use('/api/category', productCategoryRouter);
@@ -51,6 +47,10 @@ api.use('/api/tags', tagsRouter);
 
 // slides
 api.use('/api/slides', slidesRouter);
+
+// blog,
+api.use('/api/blog-category', blogCategoryRouter);
+api.use('/api', articleRouter);
 
 //handlers
 api.use(notFound);

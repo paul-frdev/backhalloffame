@@ -30,5 +30,20 @@ const cloudinaryDeleteImg = async (fileToDelete: any) => {
   });
 };
 
+const getCloudinaryImage = async (publicId: string) => {
+  // Return colors in the response
+  const options = {
+    colors: true,
+  };
 
-module.exports = { cloudinaryUploadImg, cloudinaryDeleteImg };
+  try {
+    // Get details about the asset
+    const result = await cloudinary.api.resource(publicId, options);
+    console.log(result);
+    return [{ asset_id: result.asset_id, url: result.url, public_id: result.public_id }];
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = { cloudinaryUploadImg, cloudinaryDeleteImg, getCloudinaryImage };

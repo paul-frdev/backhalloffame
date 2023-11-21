@@ -55,6 +55,10 @@ VALUES
     '[{"public_id": "public_id_1", "url": "url_1"}, {"public_id": "public_id_2", "url": "url_2"}]'
 );
 
+-- ALTER TABLE articles
+-- ADD COLUMN article_type VARCHAR(20) CHECK (article_type IN ('media_news', 'blog_news'));
+
+
 
 SELECT a.title, a.description, a.images, c.title
 FROM articles AS a JOIN blog_categories AS c On a.category_id = c.category_id;
