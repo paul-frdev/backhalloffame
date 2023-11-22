@@ -1,4 +1,4 @@
-const { createSlideModel, getSlidesModel, getSlideIdModel, updateSlideModel, deleteSlideByIdModel } = require('../models/slidesModel');
+const { createSlideModel, getSlidesModel, getSlideIdModel, updateSlideModel, deleteSlideByIdModel, updateIsActiveSlideModel } = require('../models/slidesModel');
 
 import { Request, Response } from 'express';
 
@@ -53,6 +53,18 @@ const updateSlide = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+const updateIsActiveSlide = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const response = await updateIsActiveSlideModel(id);
+
+    return res.json(response);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 const deleteSlideId = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -65,4 +77,4 @@ const deleteSlideId = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createSlide, getSlides, deleteSlideId, getSlideById, updateSlide };
+module.exports = { createSlide, getSlides, deleteSlideId, getSlideById, updateSlide, updateIsActiveSlide };

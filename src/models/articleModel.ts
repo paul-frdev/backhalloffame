@@ -50,6 +50,7 @@ const getArticleIdModel = async (id: string) => {
     a.images, 
     a.article_type,
     c.title AS cat_title, 
+    a.publish_date,
     c.category_id AS category_id 
   FROM 
     articles AS a 

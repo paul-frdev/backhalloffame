@@ -237,3 +237,12 @@ CREATE TABLE slides (
     title VARCHAR(100),
     type VARCHAR(20) CHECK (type IN ('main_slide', 'shop_slide'))
 );
+
+
+CREATE TABLE testimonials (
+    testimonial_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    testimonial_image JSONB NOT NULL,
+    testimonial_description TEXT NOT NULL,
+    testimonial_author VARCHAR(100) NOT NULL,
+    testimonial_dignity TEXT
+);
