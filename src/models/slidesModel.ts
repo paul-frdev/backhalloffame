@@ -53,7 +53,7 @@ const updateSlideModel = async (id: string, title: string, image: string[], type
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error updating blog_category:', error);
+    console.error('Error updating slide:', error);
     throw error;
   }
 };

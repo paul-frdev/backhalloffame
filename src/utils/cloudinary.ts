@@ -39,7 +39,7 @@ const getCloudinaryImage = async (publicId: string) => {
   try {
     // Get details about the asset
     const result = await cloudinary.api.resource(publicId, options);
-    console.log(result);
+
     return [{ asset_id: result.asset_id, url: result.url, public_id: result.public_id }];
   } catch (error) {
     console.error(error);

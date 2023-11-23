@@ -15,6 +15,7 @@ const productCategoryRouter = require('./productCategoriesRoutes');
 const tagsRouter = require('./tagsRoutes');
 const slidesRouter = require('./slidesRoutes');
 const testimonialRouter = require('./testimonialRoutes');
+const contentRouter = require('./contentRoutes');
 
 const { errorHandler, notFound } = require('../middlewares/errorHandler');
 
@@ -51,6 +52,9 @@ api.use('/api/slides', slidesRouter);
 
 // testimonials
 api.use('/api/testimonial', testimonialRouter);
+
+// content
+api.use('/api', contentRouter);
 
 // blog,
 api.use('/api/blog-category', blogCategoryRouter);

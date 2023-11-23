@@ -244,5 +244,15 @@ CREATE TABLE testimonials (
     testimonial_image JSONB NOT NULL,
     testimonial_description TEXT NOT NULL,
     testimonial_author VARCHAR(100) NOT NULL,
-    testimonial_dignity TEXT
+    testimonial_dignity TEXT,
+    is_active BOOLEAN DEFAULT true
 );
+
+CREATE TABLE about (
+    about_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    about_title VARCHAR(100),
+    about_description TEXT NOT NULL
+);
+
+-- ALTER TABLE testimonials
+-- ADD COLUMN is_active BOOLEAN DEFAULT false;
