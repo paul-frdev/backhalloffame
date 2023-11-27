@@ -1,11 +1,15 @@
 const { pool } = require('../config/dbConnect');
 
-const createTestimonialModel = async (image: string[], description: string, author: string, dignity: string, is_active: string) => {
+const createTestimonialModel = async (image: string[], description: string, author: string, dignity: string, is_active: string, adminTag: string) => {
   const query =
     'INSERT INTO testimonials (testimonial_image, testimonial_description, testimonial_author, testimonial_dignity, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING *';
   const imagesToJson = JSON.stringify(image);
 
   const { rows } = await pool.query(query, [imagesToJson, description, author, dignity, is_active]);
+
+  const testimonialId = rows[0].testimonial_id;
+
+  await pool.query(`INSERT INTO testimonial_tags (testimonial_id, tag_id) VALUES ($1, $2)`, [testimonialId, adminTag]);
 
   return rows[0];
 };
@@ -31,14 +35,15 @@ const getTestimonialIdModel = async (id: string) => {
 
 const updateTestimonialModel = async (id: string, image: string[], description: string, author: string, dignity: string) => {
   try {
-    const query = `UPDATE testimonials SET testimonial_image = '${image}' testimonial_description = '${description}' testimonial_author = '${author}' testimonial_dignity = '${dignity}' WHERE testimonial_id = '${id}'`;
+    const query = `UPDATE testimonials SET testimonial_image = $1, testimonial_description = $2, testimonial_author = $3, testimonial_dignity = $4 WHERE testimonial_id = $5`;
 
-    const { rows } = await pool.query(query);
+    const values = [image, description, author, dignity, id];
+
+    const { rows } = await pool.query(query, values);
 
     return rows[0];
   } catch (error) {
-    // Handle the error here
-    console.error('Error updating testimonial:', error);
+    console.error('Error updating review:', error);
     throw error;
   }
 };
@@ -64,14 +69,20 @@ const updateIsActiveTestimonialModel = async (id: string) => {
 };
 
 const deleteTestimonialByIdModel = async (id: string) => {
-  const query = `DELETE FROM testimonials WHERE testimonial_id = '${id}'`;
+  const client = await pool.connect();
 
   try {
-    const { rows } = await pool.query(query);
+    await client.query('BEGIN');
+    await Promise.resolve([client.query(`DELETE FROM testimonial_tags WHERE testimonial_id = '${id}'`)]);
 
-    return rows[0];
+    await client.query(`DELETE FROM testimonials WHERE testimonial_id = '${id}'`);
+    await client.query('COMMIT');
   } catch (error) {
-    console.log(`Error deleting testimonial_id, ${error}`);
+    await client.query('ROLLBACK');
+    console.error('Error deleting product:', error);
+    throw error;
+  } finally {
+    client.release();
   }
 };
 

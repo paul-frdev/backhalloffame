@@ -8,7 +8,7 @@ const createAboutModel = async (title: string, description: string) => {
   return rows[0];
 };
 
-const getAboutUSModel = async () => {
+const getAboutUsModel = async () => {
   const query = `SELECT * FROM about;`;
 
   try {
@@ -37,17 +37,19 @@ const getAboutModel = async (id: string) => {
 };
 
 const updateAboutModel = async (id: string, title: string, description: string) => {
-  try {
-    const query = `UPDATE about SET about_title = '${title}' about_description = '${description}' WHERE about_id = '${id}' `;
+  const query = 'UPDATE about SET about_title = $1, about_description = $2 WHERE about_id = $3;';
 
-    const { rows } = await pool.query(query);
+  const values = [title, description, id];
+
+  try {
+    const { rows } = await pool.query(query, values);
 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting brand:', error);
+    console.error('Error is getting about from table:', error);
     throw error;
   }
 };
 
-module.exports = { getAboutModel, createAboutModel, updateAboutModel, getAboutUSModel };
+module.exports = { getAboutModel, createAboutModel, updateAboutModel, getAboutUsModel };

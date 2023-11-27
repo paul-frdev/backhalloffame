@@ -10,10 +10,10 @@ const {
 } = require('../models/testimonialsModel');
 
 const createTestimonial = asyncHandler(async (req: Request, res: Response) => {
-  const { image, desriptiontext, author, dignity, is_active } = req.body;
-  console.log(image, desriptiontext, author, dignity, is_active);
+  const { image, desriptiontext, author, dignity, is_active, adminTag } = req.body;
+  console.log(image, desriptiontext, author, dignity, is_active, adminTag);
   try {
-    const response = await createTestimonialModel(image, desriptiontext, author, dignity, is_active);
+    const response = await createTestimonialModel(image, desriptiontext, author, dignity, is_active, adminTag);
 
     return res.json(response);
   } catch (error) {
