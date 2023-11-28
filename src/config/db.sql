@@ -247,3 +247,6 @@ CREATE TABLE testimonial_tags (testimonial_id UUID NOT NULL,
                                                                PRIMARY KEY (testimonial_id,
                                                                             tag_id));
 
+
+CREATE TABLE refund (refund_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+                                                                  refund_text TEXT NOT NULL);

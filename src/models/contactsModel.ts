@@ -1,9 +1,9 @@
 const { pool } = require('../config/dbConnect');
 
-const createContactsModel = async (title: string, address: string, email: string) => {
-  const query = 'INSERT INTO contacts (contacts_title, contacts_address, contacts_email) VALUES ($1, $2, $3) RETURNING *';
+const createContactsModel = async (title: string, address: string, email: string, phone: string) => {
+  const query = 'INSERT INTO contacts (contacts_title, contacts_address, contacts_email, contacts_phone) VALUES ($1, $2, $3, $4) RETURNING *';
 
-  const { rows } = await pool.query(query, [title, address, email]);
+  const { rows } = await pool.query(query, [title, address, email, phone]);
 
   return rows[0];
 };
@@ -36,11 +36,11 @@ const getContactsModelId = async (id: string) => {
   }
 };
 
-const updateContactsModel = async (id: string, title: string, address: string, email: string) => {
-  const query = 'UPDATE contacts SET contacts_title = $1, contacts_address = $2, contacts_email = $3, WHERE contacts_id = $4;';
-  console.log('title, description, id', title, address, email, id);
+const updateContactsModel = async (id: string, title: string, address: string, email: string, phone: string) => {
+  const query = 'UPDATE contacts SET contacts_title = $1, contacts_address = $2, contacts_email = $3, contacts_phone = $4 WHERE contacts_id = $5;';
+  console.log('title, description, id', title, address, email, phone, id);
 
-  const values = [title, address, email, id];
+  const values = [title, address, email, phone, id];
 
   try {
     const { rows } = await pool.query(query, values);

@@ -4,10 +4,10 @@ const asyncHandler = require('express-async-handler');
 const { getContactsModel, createContactsModel, getContactsModelId, updateContactsModel } = require('../models/contactsModel');
 
 const createContacts = asyncHandler(async (req: Request, res: Response) => {
-  const { contacts_title, contacts_address, contacts_email } = req.body;
+  const { contacts_title, contacts_address, contacts_email, contacts_phone } = req.body;
 
   try {
-    const response = await createContactsModel(contacts_title, contacts_address, contacts_email);
+    const response = await createContactsModel(contacts_title, contacts_address, contacts_email, contacts_phone);
 
     return res.json(response);
   } catch (error) {
