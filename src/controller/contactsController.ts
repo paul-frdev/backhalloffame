@@ -38,12 +38,12 @@ const getContactsId = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const updateContacts = asyncHandler(async (req: Request, res: Response) => {
-  const { contacts_title, contacts_address, contacts_email } = req.body;
+  const { contacts_title, contacts_address, contacts_email, contacts_phone } = req.body;
   const { id } = req.params;
-  console.log(id, contacts_title, contacts_address, contacts_email);
+  console.log(id, contacts_title, contacts_address, contacts_email, contacts_phone);
 
   try {
-    const response = await updateContactsModel(id, contacts_title, contacts_address, contacts_email);
+    const response = await updateContactsModel(id, contacts_title, contacts_address, contacts_email, contacts_phone);
 
     return res.json(response);
   } catch (error) {
