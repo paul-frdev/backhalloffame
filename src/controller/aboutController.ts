@@ -1,7 +1,12 @@
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
-const { getAboutModel, createAboutModel, updateAboutModel, getAboutUsModel } = require('../models/aboutModel');
+const {
+  getAboutModel,
+  createAboutModel,
+  updateAboutModel,
+  getAboutUsModel,
+} = require("../models/aboutModel");
 
 const createAbout = asyncHandler(async (req: Request, res: Response) => {
   const { about_title, about_description } = req.body;
@@ -11,7 +16,7 @@ const createAbout = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -40,7 +45,6 @@ const getAbout = asyncHandler(async (req: Request, res: Response) => {
 const updateAbout = asyncHandler(async (req: Request, res: Response) => {
   const { about_title, about_description } = req.body;
   const { id } = req.params;
-  console.log(id, about_title, about_description);
 
   try {
     const response = await updateAboutModel(id, about_title, about_description);

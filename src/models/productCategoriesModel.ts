@@ -1,15 +1,16 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createPrCategoryModel = async (categoryName: string) => {
   try {
-    const query = 'INSERT INTO product_categories (category_name) VALUES ($1) RETURNING *';
-    
+    const query =
+      "INSERT INTO product_categories (category_name) VALUES ($1) RETURNING *";
+
     const { rows } = await pool.query(query, [categoryName]);
 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error adding to product_categories:', error);
+    console.error("Error adding to product_categories:", error);
     throw error;
   }
 };
@@ -23,7 +24,7 @@ const updatePrCategoryModel = async (id: string, category_name: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error updating product_category:', error);
+    console.error("Error updating product_category:", error);
     throw error;
   }
 };
@@ -36,7 +37,7 @@ const deletePrCategoryModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting product_category:', error);
+    console.error("Error deleting product_category:", error);
     throw error;
   }
 };
@@ -50,7 +51,7 @@ const getPrCategoryByIdModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error getting product_category:', error);
+    console.error("Error getting product_category:", error);
     throw error;
   }
 };
@@ -60,13 +61,19 @@ const getAllPrCategoriesModel = async () => {
 
   try {
     const { rows } = await pool.query(query);
-    
+
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error getting from product_categories:', error);
+    console.error("Error getting from product_categories:", error);
     throw error;
   }
 };
 
-module.exports = { createPrCategoryModel, updatePrCategoryModel, deletePrCategoryModel, getPrCategoryByIdModel, getAllPrCategoriesModel };
+module.exports = {
+  createPrCategoryModel,
+  updatePrCategoryModel,
+  deletePrCategoryModel,
+  getPrCategoryByIdModel,
+  getAllPrCategoriesModel,
+};

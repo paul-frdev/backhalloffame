@@ -1,8 +1,17 @@
-const { createSlideModel, getSlidesModel, getSlideIdModel, updateSlideModel, deleteSlideByIdModel, updateIsActiveSlideModel } = require('../models/slidesModel');
+const {
+  createSlideModel,
+  getSlidesModel,
+  getSlideIdModel,
+  updateSlideModel,
+  deleteSlideByIdModel,
+  updateIsActiveSlideModel,
+  getMainSlidesModel,
+  getShopSlidesModel,
+} = require("../models/slidesModel");
 
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require("express-async-handler");
 
 const createSlide = asyncHandler(async (req: Request, res: Response) => {
   const { title, image, slideType } = req.body;
@@ -12,7 +21,7 @@ const createSlide = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -23,7 +32,43 @@ const getSlides = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(getSlides);
   } catch (error) {
-    console.log('error');
+    console.error("error");
+
+    throw new Error(error);
+  }
+});
+
+const getMainSlides = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const getSlides = await getMainSlidesModel();
+
+    const formattedSlides = getSlides.map((item: any) => ({
+      id: item.slide_id,
+      image: item.slide_image,
+      title: item.title,
+    }));
+
+    return res.json(formattedSlides);
+  } catch (error) {
+    console.error("error");
+
+    throw new Error(error);
+  }
+});
+
+const getShopSlides = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const getSlides = await getShopSlidesModel();
+
+    const formattedSlides = getSlides.map((item: any) => ({
+      id: item.slide_id,
+      image: item.slide_image,
+      title: item.title,
+    }));
+
+    return res.json(formattedSlides);
+  } catch (error) {
+    console.error("error");
 
     throw new Error(error);
   }
@@ -53,17 +98,19 @@ const updateSlide = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const updateIsActiveSlide = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+const updateIsActiveSlide = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
 
-  try {
-    const response = await updateIsActiveSlideModel(id);
+    try {
+      const response = await updateIsActiveSlideModel(id);
 
-    return res.json(response);
-  } catch (error) {
-    throw new Error(error);
-  }
-});
+      return res.json(response);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+);
 
 const deleteSlideId = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -72,9 +119,18 @@ const deleteSlideId = asyncHandler(async (req: Request, res: Response) => {
     const response = await deleteSlideByIdModel(id);
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
 
-module.exports = { createSlide, getSlides, deleteSlideId, getSlideById, updateSlide, updateIsActiveSlide };
+module.exports = {
+  createSlide,
+  getSlides,
+  deleteSlideId,
+  getSlideById,
+  updateSlide,
+  updateIsActiveSlide,
+  getMainSlides,
+  getShopSlides,
+};

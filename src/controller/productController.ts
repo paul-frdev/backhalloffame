@@ -1,11 +1,28 @@
-const { createProductModel, getProductsModel, deleteProductModel } = require('../models/productModel');
-import { Request, Response } from 'express';
+const {
+  createProductModel,
+  getProductsModel,
+  deleteProductModel,
+} = require("../models/productModel");
+import { Request, Response } from "express";
 
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require("express-async-handler");
 
 const createProduct = asyncHandler(async (req: Request, res: Response) => {
-  const { title, description, price, discount, isDiscount, category, images, colors, sizes, weights, brands, quantity, tags } = req.body;
-  console.log('discountPrice', discount);
+  const {
+    title,
+    description,
+    price,
+    discount,
+    isDiscount,
+    category,
+    images,
+    colors,
+    sizes,
+    weights,
+    brands,
+    quantity,
+    tags,
+  } = req.body;
 
   try {
     const response = await createProductModel(
@@ -21,12 +38,12 @@ const createProduct = asyncHandler(async (req: Request, res: Response) => {
       sizes,
       weights,
       brands,
-      tags
+      tags,
     );
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -37,7 +54,7 @@ const getProducts = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -49,7 +66,7 @@ const deleteProductById = asyncHandler(async (req: Request, res: Response) => {
     const response = await deleteProductModel(id);
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });

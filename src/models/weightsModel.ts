@@ -1,15 +1,15 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createWeightModel = async (weightName: string) => {
   try {
-    const query = 'INSERT INTO weights (weight_name) VALUES ($1) RETURNING *';
+    const query = "INSERT INTO weights (weight_name) VALUES ($1) RETURNING *";
 
     const { rows } = await pool.query(query, [weightName]);
 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting weight:', error);
+    console.error("Error deleting weight:", error);
     throw error;
   }
 };
@@ -23,7 +23,7 @@ const updateWeightModel = async (id: string, weight_name: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting weight:', error);
+    console.error("Error deleting weight:", error);
     throw error;
   }
 };
@@ -36,7 +36,7 @@ const deleteWeightModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting weight:', error);
+    console.error("Error deleting weight:", error);
     throw error;
   }
 };
@@ -50,7 +50,7 @@ const getWeightByIdModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting weight:', error);
+    console.error("Error deleting weight:", error);
     throw error;
   }
 };
@@ -64,9 +64,15 @@ const getAllWeightsModel = async () => {
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting weights:', error);
+    console.error("Error deleting weights:", error);
     throw error;
   }
 };
 
-module.exports = { createWeightModel, updateWeightModel, deleteWeightModel, getWeightByIdModel, getAllWeightsModel };
+module.exports = {
+  createWeightModel,
+  updateWeightModel,
+  deleteWeightModel,
+  getWeightByIdModel,
+  getAllWeightsModel,
+};

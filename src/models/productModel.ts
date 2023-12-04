@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createProductModel = async (
   title: string,
@@ -15,7 +15,7 @@ const createProductModel = async (
   sizes: string[],
   weights: string[],
   brands: string[],
-  tags: string[]
+  tags: string[],
 ) => {
   const query = `
   INSERT INTO products (title, description_text, price, quantity, discount, isdiscount, images, category_id)
@@ -24,28 +24,52 @@ const createProductModel = async (
 `;
 
   const imagesToJson = JSON.stringify(images);
-  const { rows } = await pool.query(query, [title, description, price, quantity, discount, isdiscount, imagesToJson, category]);
+  const { rows } = await pool.query(query, [
+    title,
+    description,
+    price,
+    quantity,
+    discount,
+    isdiscount,
+    imagesToJson,
+    category,
+  ]);
 
   const productId = rows[0].product_id;
 
   for (const colorId of colors) {
-    await pool.query(`INSERT INTO product_colors (product_id, color_id) VALUES ($1, $2)`, [productId, colorId]);
+    await pool.query(
+      `INSERT INTO product_colors (product_id, color_id) VALUES ($1, $2)`,
+      [productId, colorId],
+    );
   }
 
   for (const weightId of weights) {
-    await pool.query(`INSERT INTO product_weights (product_id, weight_id) VALUES ($1, $2)`, [productId, weightId]);
+    await pool.query(
+      `INSERT INTO product_weights (product_id, weight_id) VALUES ($1, $2)`,
+      [productId, weightId],
+    );
   }
 
   for (const sizeId of sizes) {
-    await pool.query(`INSERT INTO product_sizes (product_id, size_id) VALUES ($1, $2)`, [productId, sizeId]);
+    await pool.query(
+      `INSERT INTO product_sizes (product_id, size_id) VALUES ($1, $2)`,
+      [productId, sizeId],
+    );
   }
 
   for (const brandId of brands) {
-    await pool.query(`INSERT INTO product_brands (product_id, brand_id) VALUES ($1, $2)`, [productId, brandId]);
+    await pool.query(
+      `INSERT INTO product_brands (product_id, brand_id) VALUES ($1, $2)`,
+      [productId, brandId],
+    );
   }
 
   for (const tagId of tags) {
-    await pool.query(`INSERT INTO product_tags (product_id, tag_id) VALUES ($1, $2)`, [productId, tagId]);
+    await pool.query(
+      `INSERT INTO product_tags (product_id, tag_id) VALUES ($1, $2)`,
+      [productId, tagId],
+    );
   }
 
   return rows[0];
@@ -103,7 +127,7 @@ JOIN product_categories pc ON pc.category_id = p.category_id;
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error getting from products:', error);
+    console.error("Error getting from products:", error);
     throw error;
   }
 };
@@ -112,7 +136,7 @@ const deleteProductModel = async (id: string) => {
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     await Promise.all([
       client.query(`DELETE FROM product_colors WHERE product_id = '${id}'`),
@@ -124,10 +148,10 @@ const deleteProductModel = async (id: string) => {
 
     await client.query(`DELETE FROM products WHERE product_id = '${id}'`);
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error deleting product:', error);
+    await client.query("ROLLBACK");
+    console.error("Error deleting product:", error);
     throw error;
   } finally {
     client.release();

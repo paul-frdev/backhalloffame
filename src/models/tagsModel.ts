@@ -1,4 +1,4 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const getAllTagsModel = async () => {
   const query = `SELECT * FROM tags;`;
@@ -9,7 +9,7 @@ const getAllTagsModel = async () => {
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting tags from table:', error);
+    console.error("Error is getting tags from table:", error);
     throw error;
   }
 };
@@ -23,7 +23,7 @@ const getProductTagsModel = async () => {
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting tags from table:', error);
+    console.error("Error is getting tags from table:", error);
     throw error;
   }
 };
@@ -37,7 +37,7 @@ const getTestimonialAdminTagModel = async () => {
     return rows[0].tag_id;
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting tags from table:', error);
+    console.error("Error is getting tags from table:", error);
     throw error;
   }
 };
@@ -51,9 +51,14 @@ const getTestimonialUserTagModel = async () => {
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting tags from table:', error);
+    console.error("Error is getting tags from table:", error);
     throw error;
   }
 };
 
-module.exports = { getAllTagsModel, getProductTagsModel, getTestimonialAdminTagModel, getTestimonialUserTagModel };
+module.exports = {
+  getAllTagsModel,
+  getProductTagsModel,
+  getTestimonialAdminTagModel,
+  getTestimonialUserTagModel,
+};

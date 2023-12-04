@@ -1,18 +1,21 @@
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
-const { createTicketImageModel, getALlTicketImagesModel, getTicketImageIdModel, deleteTicketImageById } = require('../models/ticketImageModel');
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
+const {
+  createTicketImageModel,
+  getALlTicketImagesModel,
+  getTicketImageIdModel,
+  deleteTicketImageById,
+} = require("../models/ticketImageModel");
 
 const createNewTicket = asyncHandler(async (req: Request, res: Response) => {
   const { title, images } = req.body;
 
-  console.log(title, images );
-  
   try {
     const response = await createTicketImageModel(title, images);
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -23,7 +26,7 @@ const getAllTickets = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(tickets);
   } catch (error) {
-    console.log('error');
+    console.error("error");
 
     throw new Error(error);
   }
@@ -34,11 +37,9 @@ const geTicketById = asyncHandler(async (req: Request, res: Response) => {
   try {
     const ticketById = await getTicketImageIdModel(id);
 
-    console.log('ticketById', ticketById);
-
     return res.json(ticketById);
   } catch (error) {
-    console.log('error');
+    console.error("error");
 
     throw new Error(error);
   }

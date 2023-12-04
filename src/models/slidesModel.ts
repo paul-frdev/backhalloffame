@@ -1,32 +1,63 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
-const createSlideModel = async (title: string, image: string[], slideType: string) => {
+const createSlideModel = async (
+  title: string,
+  image: string[],
+  slideType: string,
+) => {
   try {
-    const query = 'INSERT INTO slides (slide_image, title, type) VALUES ($1, $2, $3) RETURNING *';
+    const query =
+      "INSERT INTO slides (slide_image, title, type) VALUES ($1, $2, $3) RETURNING *";
 
     const imagesToJson = JSON.stringify(image);
-
-    console.log('slideType', slideType);
 
     const { rows } = await pool.query(query, [imagesToJson, title, slideType]);
 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting slide:', error);
+    console.error("Error deleting slide:", error);
     throw error;
   }
 };
 
 const getSlidesModel = async () => {
-  const query = 'SELECT * FROM slides;';
+  const query = "SELECT * FROM slides;";
   try {
     const { rows } = await pool.query(query);
 
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error getting slides:', error);
+    console.error("Error getting slides:", error);
+    throw error;
+  }
+};
+
+const getMainSlidesModel = async () => {
+  const query =
+    "SELECT * FROM slides WHERE type = 'main_slide' AND is_active = true;";
+  try {
+    const { rows } = await pool.query(query);
+
+    return rows;
+  } catch (error) {
+    // Handle the error here
+    console.error("Error getting slides:", error);
+    throw error;
+  }
+};
+
+const getShopSlidesModel = async () => {
+  const query =
+    "SELECT * FROM slides WHERE type = 'shop_slide' AND is_active = true;";
+  try {
+    const { rows } = await pool.query(query);
+
+    return rows;
+  } catch (error) {
+    // Handle the error here
+    console.error("Error getting slides:", error);
     throw error;
   }
 };
@@ -39,12 +70,17 @@ const getSlideIdModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error getting slideId:', error);
+    console.error("Error getting slideId:", error);
     throw error;
   }
 };
 
-const updateSlideModel = async (id: string, title: string, image: string[], type: string) => {
+const updateSlideModel = async (
+  id: string,
+  title: string,
+  image: string[],
+  type: string,
+) => {
   try {
     const query = `UPDATE slides SET title = '${title}' slide_image = '${image}' type = '${type}' WHERE slide_id = '${id}'`;
 
@@ -53,7 +89,7 @@ const updateSlideModel = async (id: string, title: string, image: string[], type
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error updating slide:', error);
+    console.error("Error updating slide:", error);
     throw error;
   }
 };
@@ -73,7 +109,7 @@ const updateIsActiveSlideModel = async (id: string) => {
 
     return result.rows[0];
   } catch (error) {
-    console.error('Error updating slide is_active:', error);
+    console.error("Error updating slide is_active:", error);
     throw error;
   }
 };
@@ -86,8 +122,17 @@ const deleteSlideByIdModel = async (id: string) => {
 
     return rows[0];
   } catch (error) {
-    console.log(`Error deleting SlideId, ${error}`);
+    console.error(`Error deleting SlideId, ${error}`);
   }
 };
 
-module.exports = { createSlideModel, getSlidesModel, getSlideIdModel, updateSlideModel, deleteSlideByIdModel, updateIsActiveSlideModel };
+module.exports = {
+  createSlideModel,
+  getSlidesModel,
+  getSlideIdModel,
+  updateSlideModel,
+  deleteSlideByIdModel,
+  updateIsActiveSlideModel,
+  getMainSlidesModel,
+  getShopSlidesModel,
+};

@@ -1,6 +1,12 @@
-const { createWeightModel, updateWeightModel, deleteWeightModel, getWeightByIdModel, getAllWeightsModel } = require('../models/weightsModel');
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+const {
+  createWeightModel,
+  updateWeightModel,
+  deleteWeightModel,
+  getWeightByIdModel,
+  getAllWeightsModel,
+} = require("../models/weightsModel");
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
 const createWeight = asyncHandler(async (req: Request, res: Response) => {
   const { weight_name } = req.body;
@@ -10,7 +16,7 @@ const createWeight = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -61,4 +67,10 @@ const getallWeights = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createWeight, updateWeight, deleteWeight, getWeightById, getallWeights };
+module.exports = {
+  createWeight,
+  updateWeight,
+  deleteWeight,
+  getWeightById,
+  getallWeights,
+};

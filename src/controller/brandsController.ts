@@ -1,6 +1,12 @@
-const { createBrandModel, updateBrandModel, deleteBrandModel, getBrandByIdModel, getAllBrandsModel } = require('../models/brandsModel');
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+const {
+  createBrandModel,
+  updateBrandModel,
+  deleteBrandModel,
+  getBrandByIdModel,
+  getAllBrandsModel,
+} = require("../models/brandsModel");
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
 const createBrand = asyncHandler(async (req: Request, res: Response) => {
   const { brand_name } = req.body;
@@ -10,7 +16,7 @@ const createBrand = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -61,4 +67,10 @@ const getallBrands = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createBrand, updateBrand, deleteBrand, getBrandById, getallBrands };
+module.exports = {
+  createBrand,
+  updateBrand,
+  deleteBrand,
+  getBrandById,
+  getallBrands,
+};

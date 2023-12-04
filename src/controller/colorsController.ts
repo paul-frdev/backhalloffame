@@ -1,6 +1,12 @@
-const { createColorModel, updateColorsModel, deleteColorsModel, getColorByIdModel, getAllColorsModel } = require('../models/colorsModel');
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+const {
+  createColorModel,
+  updateColorsModel,
+  deleteColorsModel,
+  getColorByIdModel,
+  getAllColorsModel,
+} = require("../models/colorsModel");
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
 const createColor = asyncHandler(async (req: Request, res: Response) => {
   const { color_name } = req.body;
@@ -10,7 +16,7 @@ const createColor = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -41,7 +47,6 @@ const deleteColor = asyncHandler(async (req: Request, res: Response) => {
 
 const getColorById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-console.log('id', id);
 
   try {
     const response = await getColorByIdModel(id);
@@ -62,4 +67,10 @@ const getallColors = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createColor, updateColor, deleteColor, getColorById, getallColors };
+module.exports = {
+  createColor,
+  updateColor,
+  deleteColor,
+  getColorById,
+  getallColors,
+};

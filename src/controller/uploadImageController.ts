@@ -1,13 +1,17 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-const fs = require('fs');
-const asyncHandler = require('express-async-handler');
+const fs = require("fs");
+const asyncHandler = require("express-async-handler");
 
-const { cloudinaryUploadImg, cloudinaryDeleteImg, getCloudinaryImage } = require('../utils/cloudinary');
+const {
+  cloudinaryUploadImg,
+  cloudinaryDeleteImg,
+  getCloudinaryImage,
+} = require("../utils/cloudinary");
 
 const uploadImages = asyncHandler(async (req: any, res: Response) => {
   try {
-    const uploader = (path: string) => cloudinaryUploadImg(path, 'images');
+    const uploader = (path: string) => cloudinaryUploadImg(path, "images");
     const urls = [];
     const files = req.files;
     for (const file of files) {
@@ -30,10 +34,9 @@ const deleteImages = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const deleted = await cloudinaryDeleteImg(id, 'images');
-    console.log('deleted', deleted);
+    const deleted = await cloudinaryDeleteImg(id, "images");
 
-    res.json({ message: 'Image deleted' });
+    res.json({ message: "Image deleted" });
   } catch (error) {
     throw new Error(error);
   }

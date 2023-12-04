@@ -1,7 +1,12 @@
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
-const { createRefundModel, getRefundModel, getRefundModelId, updateRefundModel } = require('../models/refundModel');
+const {
+  createRefundModel,
+  getRefundModel,
+  getRefundModelId,
+  updateRefundModel,
+} = require("../models/refundModel");
 
 const createRefund = asyncHandler(async (req: Request, res: Response) => {
   const { refund_text } = req.body;
@@ -11,7 +16,7 @@ const createRefund = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -40,7 +45,6 @@ const getRefundId = asyncHandler(async (req: Request, res: Response) => {
 const updateRefund = asyncHandler(async (req: Request, res: Response) => {
   const { refund_text } = req.body;
   const { id } = req.params;
-  console.log(id, refund_text);
 
   try {
     const response = await updateRefundModel(id, refund_text);

@@ -1,7 +1,7 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createColorModel = async (colorName: string) => {
-  const query = 'INSERT INTO colors (color_name) VALUES ($1) RETURNING *';
+  const query = "INSERT INTO colors (color_name) VALUES ($1) RETURNING *";
 
   const { rows } = await pool.query(query, [colorName]);
 
@@ -24,7 +24,7 @@ const deleteColorsModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting color:', error);
+    console.error("Error deleting color:", error);
     throw error;
   }
 };
@@ -38,7 +38,7 @@ const getColorByIdModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting color:', error);
+    console.error("Error deleting color:", error);
     throw error;
   }
 };
@@ -52,9 +52,15 @@ const getAllColorsModel = async () => {
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting color:', error);
+    console.error("Error deleting color:", error);
     throw error;
   }
 };
 
-module.exports = { createColorModel, updateColorsModel, deleteColorsModel, getColorByIdModel, getAllColorsModel };
+module.exports = {
+  createColorModel,
+  updateColorsModel,
+  deleteColorsModel,
+  getColorByIdModel,
+  getAllColorsModel,
+};

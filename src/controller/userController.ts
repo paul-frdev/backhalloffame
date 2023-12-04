@@ -29,7 +29,7 @@ const createNewUser = async (req: Request, res: Response) => {
 
     return res.json({ jwtToken });
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -76,7 +76,7 @@ const authorizeUserProfile = async (req: Request, res: Response) => {
 
     res.json(curUser);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send("Server error");
   }
 };

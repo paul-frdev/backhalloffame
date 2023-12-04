@@ -1,6 +1,12 @@
-const { createPrCategoryModel, updatePrCategoryModel, deletePrCategoryModel, getPrCategoryByIdModel, getAllPrCategoriesModel } = require('../models/productCategoriesModel');
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+const {
+  createPrCategoryModel,
+  updatePrCategoryModel,
+  deletePrCategoryModel,
+  getPrCategoryByIdModel,
+  getAllPrCategoriesModel,
+} = require("../models/productCategoriesModel");
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
 const createPrCategory = asyncHandler(async (req: Request, res: Response) => {
   const { category_name } = req.body;
@@ -10,7 +16,7 @@ const createPrCategory = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -61,4 +67,10 @@ const getallPrCategories = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createPrCategory, updatePrCategory, deletePrCategory, getPrCategoryById, getallPrCategories };
+module.exports = {
+  createPrCategory,
+  updatePrCategory,
+  deletePrCategory,
+  getPrCategoryById,
+  getallPrCategories,
+};

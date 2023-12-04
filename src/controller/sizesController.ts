@@ -1,6 +1,12 @@
-const { createSizeModel, updateSizeModel, deleteSizeModel, getSizeByIdModel, getAllSizesModel } = require('../models/sizesModel');
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+const {
+  createSizeModel,
+  updateSizeModel,
+  deleteSizeModel,
+  getSizeByIdModel,
+  getAllSizesModel,
+} = require("../models/sizesModel");
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
 const createSize = asyncHandler(async (req: Request, res: Response) => {
   const { size_name } = req.body;
@@ -10,7 +16,7 @@ const createSize = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -61,4 +67,10 @@ const getallSizes = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-module.exports = { createSize, updateSize, deleteSize, getSizeById, getallSizes };
+module.exports = {
+  createSize,
+  updateSize,
+  deleteSize,
+  getSizeById,
+  getallSizes,
+};

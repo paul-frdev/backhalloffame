@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary');
+const cloudinary = require("cloudinary");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -40,10 +40,20 @@ const getCloudinaryImage = async (publicId: string) => {
     // Get details about the asset
     const result = await cloudinary.api.resource(publicId, options);
 
-    return [{ asset_id: result.asset_id, url: result.url, public_id: result.public_id }];
+    return [
+      {
+        asset_id: result.asset_id,
+        url: result.url,
+        public_id: result.public_id,
+      },
+    ];
   } catch (error) {
     console.error(error);
   }
 };
 
-module.exports = { cloudinaryUploadImg, cloudinaryDeleteImg, getCloudinaryImage };
+module.exports = {
+  cloudinaryUploadImg,
+  cloudinaryDeleteImg,
+  getCloudinaryImage,
+};

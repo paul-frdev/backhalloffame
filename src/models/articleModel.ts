@@ -1,13 +1,28 @@
-const { pool } = require('../config/dbConnect');
-import { format } from 'date-fns';
-import { uk } from 'date-fns/locale';
+const { pool } = require("../config/dbConnect");
+import { format } from "date-fns";
+import { uk } from "date-fns/locale";
 
-const createArticleModel = async (title: string, description: string, images: string[], category_id: string, publishDate: Date, type: string) => {
+const createArticleModel = async (
+  title: string,
+  description: string,
+  images: string[],
+  category_id: string,
+  publishDate: Date,
+  type: string,
+) => {
   const query =
-    'INSERT INTO articles (title, description, images, publish_date, category_id, status, article_type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+    "INSERT INTO articles (title, description, images, publish_date, category_id, status, article_type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
   const imagesToJson = JSON.stringify(images);
 
-  const { rows } = await pool.query(query, [title, description, imagesToJson, publishDate, category_id, 'draft', type]);
+  const { rows } = await pool.query(query, [
+    title,
+    description,
+    imagesToJson,
+    publishDate,
+    category_id,
+    "draft",
+    type,
+  ]);
 
   return rows[0];
 };
@@ -30,6 +45,31 @@ const getMediaArticlesModel = async () => {
   const { rows } = await pool.query(query);
 
   return rows;
+};
+
+const getMediaArticleIdModel = async (id: string) => {
+  const query = `
+  SELECT 
+    a.title, 
+    a.description, 
+    a.images, 
+    a.article_type,
+    c.title AS cat_title, 
+    a.publish_date,
+    c.category_id AS category_id 
+  FROM 
+    articles AS a 
+  JOIN 
+    blog_categories AS c 
+  ON 
+    a.category_id = c.category_id 
+  WHERE 
+    a.article_id = '${id}' AND article_type = 'media_news'
+`;
+
+  const { rows } = await pool.query(query);
+
+  return rows[0];
 };
 
 const getALlPublishedArticlesModel = async () => {
@@ -75,13 +115,13 @@ const deleteArticleModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting brand:', error);
+    console.error("Error deleting brand:", error);
     throw error;
   }
 };
 
 const publishScheduledArticles = async () => {
-  const currentDate = format(new Date(), 'yyyy-MM-dd', { locale: uk });
+  const currentDate = format(new Date(), "yyyy-MM-dd", { locale: uk });
 
   const query = `UPDATE articles SET status = 'published' WHERE publish_date = '${currentDate}' AND status = 'draft'`;
   const { rows } = await pool.query(query);
@@ -96,4 +136,5 @@ module.exports = {
   deleteArticleModel,
   publishScheduledArticles,
   getALlPublishedArticlesModel,
+  getMediaArticleIdModel,
 };

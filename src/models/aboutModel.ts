@@ -1,7 +1,8 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createAboutModel = async (title: string, description: string) => {
-  const query = 'INSERT INTO about (about_title, about_description) VALUES ($1, $2) RETURNING *';
+  const query =
+    "INSERT INTO about (about_title, about_description) VALUES ($1, $2) RETURNING *";
 
   const { rows } = await pool.query(query, [title, description]);
 
@@ -17,7 +18,7 @@ const getAboutUsModel = async () => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting about from table:', error);
+    console.error("Error is getting about from table:", error);
     throw error;
   }
 };
@@ -31,13 +32,18 @@ const getAboutModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting about from table:', error);
+    console.error("Error is getting about from table:", error);
     throw error;
   }
 };
 
-const updateAboutModel = async (id: string, title: string, description: string) => {
-  const query = 'UPDATE about SET about_title = $1, about_description = $2 WHERE about_id = $3;';
+const updateAboutModel = async (
+  id: string,
+  title: string,
+  description: string,
+) => {
+  const query =
+    "UPDATE about SET about_title = $1, about_description = $2 WHERE about_id = $3;";
 
   const values = [title, description, id];
 
@@ -47,9 +53,14 @@ const updateAboutModel = async (id: string, title: string, description: string) 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error is getting about from table:', error);
+    console.error("Error is getting about from table:", error);
     throw error;
   }
 };
 
-module.exports = { getAboutModel, createAboutModel, updateAboutModel, getAboutUsModel };
+module.exports = {
+  getAboutModel,
+  createAboutModel,
+  updateAboutModel,
+  getAboutUsModel,
+};

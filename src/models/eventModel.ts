@@ -1,7 +1,7 @@
-import { format } from 'date-fns';
-import { uk } from 'date-fns/locale';
+import { format } from "date-fns";
+import { uk } from "date-fns/locale";
 
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createEventModel = async (
   title: string,
@@ -15,7 +15,7 @@ const createEventModel = async (
   childPrice: number,
   adultQuantityTickets: number,
   childrenQuantityTickets: number,
-  ticketImg: string
+  ticketImg: string,
 ) => {
   const query = `
   INSERT INTO events (title, descriptiontext, event_date, publish_date, images, location_address, adult_price, child_price, adult_quantity_tickets, children_quantity_tickets, ticket_image_id, status)
@@ -37,13 +37,16 @@ const createEventModel = async (
       adultQuantityTickets,
       childrenQuantityTickets,
       ticketImg,
-      'draft',
+      "draft",
     ]);
 
     const eventId = rows[0].event_id;
 
     for (const timeId of time) {
-      await pool.query(`INSERT INTO event_time_options (event_id, time_id) VALUES ($1, $2)`, [eventId, timeId]);
+      await pool.query(
+        `INSERT INTO event_time_options (event_id, time_id) VALUES ($1, $2)`,
+        [eventId, timeId],
+      );
     }
 
     return rows[0];
@@ -140,7 +143,7 @@ WHERE e.status = 'published' AND event_id = '${id}';
 };
 
 const publishScheduledEvents = async () => {
-  const currentDate = format(new Date(), 'yyyy-MM-dd', { locale: uk });
+  const currentDate = format(new Date(), "yyyy-MM-dd", { locale: uk });
 
   const query = `UPDATE events SET status = 'published' WHERE publish_date = '${currentDate}' OR publish_date < '${currentDate}' AND status = 'draft'`;
   const { rows } = await pool.query(query);
@@ -151,16 +154,18 @@ const deleteEventModel = async (id: string) => {
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
-    await Promise.all([client.query(`DELETE FROM event_time_options WHERE event_id = '${id}'`)]);
+    await Promise.all([
+      client.query(`DELETE FROM event_time_options WHERE event_id = '${id}'`),
+    ]);
 
     await client.query(`DELETE FROM events WHERE event_id = '${id}'`);
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error deleting event:', error);
+    await client.query("ROLLBACK");
+    console.error("Error deleting event:", error);
     throw error;
   } finally {
     client.release();

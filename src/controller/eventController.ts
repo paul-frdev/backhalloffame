@@ -4,12 +4,12 @@ const {
   getALlPublishedEventsModel,
   getPublishedEventIdModel,
   deleteEventModel,
-} = require('../models/eventModel');
-const { getTimeOptionsModel } = require('../models/timeOptionsModel');
+} = require("../models/eventModel");
+const { getTimeOptionsModel } = require("../models/timeOptionsModel");
 
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require("express-async-handler");
 
 const createEvent = asyncHandler(async (req: Request, res: Response) => {
   const {
@@ -40,12 +40,12 @@ const createEvent = asyncHandler(async (req: Request, res: Response) => {
       childPrice,
       adultQuantityTickets,
       childrenQuantityTickets,
-      ticketImg
+      ticketImg,
     );
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -56,36 +56,40 @@ const getAllEvents = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(getArticles);
   } catch (error) {
-    console.log('error');
+    console.error("error");
 
     throw new Error(error);
   }
 });
 
-const getAllPublishedEvents = asyncHandler(async (req: Request, res: Response) => {
-  try {
-    const getEvents = await getALlPublishedEventsModel();
+const getAllPublishedEvents = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const getEvents = await getALlPublishedEventsModel();
 
-    return res.json(getEvents);
-  } catch (error) {
-    console.log('error');
+      return res.json(getEvents);
+    } catch (error) {
+      console.error("error");
 
-    throw new Error(error);
-  }
-});
+      throw new Error(error);
+    }
+  },
+);
 
-const getPublishedEventById = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const eventById = await getPublishedEventIdModel(id);
+const getPublishedEventById = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const eventById = await getPublishedEventIdModel(id);
 
-    return res.json(eventById);
-  } catch (error) {
-    console.log('error');
+      return res.json(eventById);
+    } catch (error) {
+      console.error("error");
 
-    throw new Error(error);
-  }
-});
+      throw new Error(error);
+    }
+  },
+);
 
 const deleteEventById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -94,7 +98,7 @@ const deleteEventById = asyncHandler(async (req: Request, res: Response) => {
     const response = await deleteEventModel(id);
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -106,10 +110,17 @@ const getTimeOptions = asyncHandler(async (req: Request, res: Response) => {
 
     return res.json(getArticles);
   } catch (error) {
-    console.log('error');
+    console.error("error");
 
     throw new Error(error);
   }
 });
 
-module.exports = { createEvent, getAllEvents, getAllPublishedEvents, getPublishedEventById, getTimeOptions, deleteEventById };
+module.exports = {
+  createEvent,
+  getAllEvents,
+  getAllPublishedEvents,
+  getPublishedEventById,
+  getTimeOptions,
+  deleteEventById,
+};

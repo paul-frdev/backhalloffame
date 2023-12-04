@@ -1,17 +1,28 @@
-import { Request, Response } from 'express';
-const asyncHandler = require('express-async-handler');
+import { Request, Response } from "express";
+const asyncHandler = require("express-async-handler");
 
-const { getContactsModel, createContactsModel, getContactsModelId, updateContactsModel } = require('../models/contactsModel');
+const {
+  getContactsModel,
+  createContactsModel,
+  getContactsModelId,
+  updateContactsModel,
+} = require("../models/contactsModel");
 
 const createContacts = asyncHandler(async (req: Request, res: Response) => {
-  const { contacts_title, contacts_address, contacts_email, contacts_phone } = req.body;
+  const { contacts_title, contacts_address, contacts_email, contacts_phone } =
+    req.body;
 
   try {
-    const response = await createContactsModel(contacts_title, contacts_address, contacts_email, contacts_phone);
+    const response = await createContactsModel(
+      contacts_title,
+      contacts_address,
+      contacts_email,
+      contacts_phone,
+    );
 
     return res.json(response);
   } catch (error) {
-    console.log('error', error);
+    console.error("error", error);
     throw new Error(error);
   }
 });
@@ -38,12 +49,18 @@ const getContactsId = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const updateContacts = asyncHandler(async (req: Request, res: Response) => {
-  const { contacts_title, contacts_address, contacts_email, contacts_phone } = req.body;
+  const { contacts_title, contacts_address, contacts_email, contacts_phone } =
+    req.body;
   const { id } = req.params;
-  console.log(id, contacts_title, contacts_address, contacts_email, contacts_phone);
 
   try {
-    const response = await updateContactsModel(id, contacts_title, contacts_address, contacts_email, contacts_phone);
+    const response = await updateContactsModel(
+      id,
+      contacts_title,
+      contacts_address,
+      contacts_email,
+      contacts_phone,
+    );
 
     return res.json(response);
   } catch (error) {

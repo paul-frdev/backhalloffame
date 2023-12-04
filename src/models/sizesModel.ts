@@ -1,15 +1,15 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createSizeModel = async (sizeName: string) => {
   try {
-    const query = 'INSERT INTO sizes (size_name) VALUES ($1) RETURNING *';
+    const query = "INSERT INTO sizes (size_name) VALUES ($1) RETURNING *";
 
     const { rows } = await pool.query(query, [sizeName]);
 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting size:', error);
+    console.error("Error deleting size:", error);
     throw error;
   }
 };
@@ -23,7 +23,7 @@ const updateSizeModel = async (id: string, title: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting size:', error);
+    console.error("Error deleting size:", error);
     throw error;
   }
 };
@@ -36,7 +36,7 @@ const deleteSizeModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting size:', error);
+    console.error("Error deleting size:", error);
     throw error;
   }
 };
@@ -50,7 +50,7 @@ const getSizeByIdModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting size:', error);
+    console.error("Error deleting size:", error);
     throw error;
   }
 };
@@ -64,9 +64,15 @@ const getAllSizesModel = async () => {
     return rows;
   } catch (error) {
     // Handle the error here
-    console.error('Error deleting sizes:', error);
+    console.error("Error deleting sizes:", error);
     throw error;
   }
 };
 
-module.exports = { createSizeModel, updateSizeModel, deleteSizeModel, getSizeByIdModel, getAllSizesModel };
+module.exports = {
+  createSizeModel,
+  updateSizeModel,
+  deleteSizeModel,
+  getSizeByIdModel,
+  getAllSizesModel,
+};

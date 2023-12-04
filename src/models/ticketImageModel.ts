@@ -1,7 +1,8 @@
-const { pool } = require('../config/dbConnect');
+const { pool } = require("../config/dbConnect");
 
 const createTicketImageModel = async (title: string, images: string[]) => {
-  const query = 'INSERT INTO ticket_images (title, ticket_images) VALUES ($1, $2) RETURNING *';
+  const query =
+    "INSERT INTO ticket_images (title, ticket_images) VALUES ($1, $2) RETURNING *";
   const imagesToJson = JSON.stringify(images);
   const { rows } = await pool.query(query, [title, imagesToJson]);
 
@@ -9,7 +10,7 @@ const createTicketImageModel = async (title: string, images: string[]) => {
 };
 
 const getALlTicketImagesModel = async () => {
-  const query = 'SELECT * from ticket_images';
+  const query = "SELECT * from ticket_images";
 
   const { rows } = await pool.query(query);
 
@@ -32,4 +33,9 @@ const deleteTicketImageById = async (id: string) => {
   return rows[0];
 };
 
-module.exports = { createTicketImageModel, getALlTicketImagesModel, getTicketImageIdModel, deleteTicketImageById };
+module.exports = {
+  createTicketImageModel,
+  getALlTicketImagesModel,
+  getTicketImageIdModel,
+  deleteTicketImageById,
+};
