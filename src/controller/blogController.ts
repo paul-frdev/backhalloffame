@@ -1,27 +1,23 @@
-import { Request, Response } from "express";
-const asyncHandler = require("express-async-handler");
+import { Request, Response } from 'express';
+const asyncHandler = require('express-async-handler');
 
 const {
   createBlogCategoryModel,
   getAllCategoriesModel,
   deleteBlogCategoryModel,
   updateBlogCategoryModel,
-} = require("../models/blogModel");
-const { pool } = require("../config/dbConnect");
+  getBlogCatIdModel,
+} = require('../models/blogModel');
+const { pool } = require('../config/dbConnect');
 
 const createNewBlogCategory = async (req: Request, res: Response) => {
   const { title } = req.body;
 
   try {
-    const sameTitleCategory = await pool.query(
-      "SELECT * FROM blog_categories WHERE title = $1",
-      [title],
-    );
+    const sameTitleCategory = await pool.query('SELECT * FROM blog_categories WHERE title = $1', [title]);
 
     if (sameTitleCategory.rows.length > 0) {
-      return res
-        .status(400)
-        .json({ error: "Category with the same title is already exists" });
+      return res.status(400).json({ error: 'Category with the same title is already exists' });
     }
 
     const newTitleCategory = await createBlogCategoryModel(title);
@@ -43,11 +39,27 @@ const getallCategories = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const updateBlogCategory = asyncHandler(async (req: Request, res: Response) => {
-  const { category_name } = req.body;
+const getBlogCatById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
+
   try {
-    const response = await updateBlogCategoryModel(id, category_name);
+    const blogCatId = await getBlogCatIdModel(id);
+
+    return res.json(blogCatId);
+  } catch (error) {
+    console.error('error');
+    throw new Error(error);
+  }
+});
+
+const updateBlogCategory = asyncHandler(async (req: Request, res: Response) => {
+  const { title } = req.body;
+  const { id } = req.params;
+
+  console.log('updateBlogCategory id', id);
+  
+  try {
+    const response = await updateBlogCategoryModel(id, title);
 
     return res.json(response);
   } catch (error) {
@@ -72,4 +84,5 @@ module.exports = {
   getallCategories,
   deleteBlogCategory,
   updateBlogCategory,
+  getBlogCatById,
 };

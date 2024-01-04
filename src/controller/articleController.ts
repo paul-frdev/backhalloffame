@@ -47,10 +47,15 @@ const getMediaArticles = asyncHandler(async (req: Request, res: Response) => {
   try {
     const articles = await getMediaArticlesModel();
 
+    console.log('articles', articles);
+    
     const formattedArticles = articles.map((item: any) => ({
       id: item.article_id,
       title: item.title,
       image: item.images,
+      status: item.status,
+      cat_title: item.article_type,
+      created_at: item.created_at,
       publish_date: item.publish_date,
       description: item.description,
     }));

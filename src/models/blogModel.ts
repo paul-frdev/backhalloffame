@@ -1,15 +1,30 @@
-const { pool } = require("../config/dbConnect");
+const { pool } = require('../config/dbConnect');
 
 const createBlogCategoryModel = async (title: string) => {
-  const query = "INSERT INTO blog_categories (title) VALUES ($1) RETURNING *";
+  const query = 'INSERT INTO blog_categories (title) VALUES ($1) RETURNING *';
 
   const { rows } = await pool.query(query, [title]);
 
   return rows[0];
 };
 
+const getBlogCatIdModel = async (id: string) => {
+  const query = `
+  SELECT 
+    *
+  FROM 
+  blog_categories
+  WHERE 
+  category_id = '${id}'
+`;
+
+  const { rows } = await pool.query(query);
+
+  return rows[0];
+};
+
 const getAllCategoriesModel = async () => {
-  const query = "Select * From blog_categories";
+  const query = 'Select * From blog_categories';
   const { rows } = await pool.query(query);
 
   return rows;
@@ -23,21 +38,21 @@ const deleteBlogCategoryModel = async (id: string) => {
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error("Error deleting blog_category:", error);
+    console.error('Error deleting blog_category:', error);
     throw error;
   }
 };
 
-const updateBlogCategoryModel = async (id: string, category_name: string) => {
+const updateBlogCategoryModel = async (id: string, title: string) => {
   try {
-    const query = `UPDATE blog_categories SET category_name = '${category_name}' WHERE category_id = '${id}'`;
+    const query = `UPDATE blog_categories SET title = '${title}' WHERE category_id = '${id}'`;
 
     const { rows } = await pool.query(query);
 
     return rows[0];
   } catch (error) {
     // Handle the error here
-    console.error("Error updating blog_category:", error);
+    console.error('Error updating blog_category:', error);
     throw error;
   }
 };
@@ -47,4 +62,5 @@ module.exports = {
   getAllCategoriesModel,
   deleteBlogCategoryModel,
   updateBlogCategoryModel,
+  getBlogCatIdModel
 };
