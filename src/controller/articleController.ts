@@ -46,8 +46,6 @@ const getBlogArticles = asyncHandler(async (req: Request, res: Response) => {
 const getMediaArticles = asyncHandler(async (req: Request, res: Response) => {
   try {
     const articles = await getMediaArticlesModel();
-
-    console.log('articles', articles);
     
     const formattedArticles = articles.map((item: any) => ({
       id: item.article_id,

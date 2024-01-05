@@ -55,8 +55,6 @@ const getBlogCatById = asyncHandler(async (req: Request, res: Response) => {
 const updateBlogCategory = asyncHandler(async (req: Request, res: Response) => {
   const { title } = req.body;
   const { id } = req.params;
-
-  console.log('updateBlogCategory id', id);
   
   try {
     const response = await updateBlogCategoryModel(id, title);

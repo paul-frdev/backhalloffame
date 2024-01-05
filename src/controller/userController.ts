@@ -39,11 +39,11 @@ const loginUser = async (req: Request, res: Response) => {
 
   try {
     const curUser = await currentUser(email);
-
+  
     if (curUser.length === 0) {
       return res.status(401).json("Invalid Credential");
     }
-
+    
     const validPassword = await bcrypt.compare(password, curUser.user_password);
 
     if (!validPassword) {
@@ -70,9 +70,9 @@ const verifyUser = async (req: Request, res: Response) => {
 
 const authorizeUserProfile = async (req: Request, res: Response) => {
   const userId = parseJwt(req.headers.jwt_token);
-
+  
   try {
-    const curUser = await authorize(userId.user.id);
+    const curUser = await authorize(userId.user_id);
 
     res.json(curUser);
   } catch (error) {
